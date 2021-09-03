@@ -28,7 +28,6 @@ navbar_items = [
  { code = "en", nav_items = [
   { url = "$BASE_URL/", name = "Home" },
   { url = "$BASE_URL/posts", name = "Posts" },
-  { url = "$BASE_URL/docs", name = "Docs" },
   { url = "$BASE_URL/tags", name = "Tags" },
   { url = "$BASE_URL/categories", name = "Categories" },
  ]},
@@ -46,15 +45,14 @@ webmanifest = "/icons/site.webmanifest"
 
 # Author details
 [extra.author]
-name = "DeepThought"
+name = "Horace Guy"
 avatar = "/images/avatar.png"
 
 # Social links
 [extra.social]
-email = "<email_id>"
-github = "<github_username>"
-linkedin = "<linkedin_username>"
-stackoverflow = "<stackoverflow_userid>"
+github = "horaceg"
+linkedin = "horace-guy"
+stackoverflow = "9162021"
 
 
 # To add google analytics

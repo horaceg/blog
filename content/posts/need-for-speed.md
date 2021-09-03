@@ -17,6 +17,8 @@ Bqplot is amazing for classic plots, plays very well with ipywidgets for reactiv
 
 I deployed this on Heroku with a simple Procfile, and boom! It was live!
 
+![voila app](/images/voila-app.png)
+
 ### Speed of light
 
 In this setting, every state change triggers a round-trip to the server, through websockets (Jupyter is based on Tornado). Locally, this works great since there is zero latency between my computer and my browser (running on... my computer). 
@@ -33,6 +35,8 @@ I decided to leverage the new hot JS framework Svelte, with reactivity built-in.
 
 For plotting, I used the experimental `pancake` library by the creator of Svelte, Rich Harris. Thanks to Svelte `tweened` and `spring` functions, the transitions are smooth and easy on the eyes.
 
+![First Svelte version](/images/gradfront-alpha-vertical.png)
+
 ## Going world-scale
 
 There is a shortcoming of this setting: the latency is still there. It is handled in a better way with async javascript, but if the API is hosted in, say Frankfurt, then a user in Sydney is not going to have a very snappy experience.
@@ -48,9 +52,10 @@ At this point, you might think that this is a tad overkill for a simple pedagogi
 
 ## To the browser: TensorflowJS
 
-I ported the JAX code to TensorflowJS, on [Observable](https://observablehq.com) (plotting with the awesome vega-lite) at first and then directly in the Svelte front-end. Now I have a fully client-side app: no server, yay !?
+I ported the JAX code to TensorflowJS, on [Observable](https://observablehq.com/@horaceg/gradient-descent) at first and then directly in the Svelte front-end. Now I have a fully client-side app: no server, yay !?
 
 For the fast 30-step gradient descent, this works great and the computing happens instantly. However, when I add a simple neural network, I hit the performance wall: what takes 5ms in (already JIT-compiled) JAX, takes 300ms in the browser! yay...
 
-
-[^ipympl]: the interactive version: `ipympl`
+- [Here](https://gradfront.pages.dev/) is the current master
+- [there](https://f36dfeb7.gradfront.pages.dev/) is the neural network version
+- [there](https://deploy-preview-1--gradient-descent.netlify.app/) the version with a contour plot of the gradient of the loss
