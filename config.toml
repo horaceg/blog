@@ -56,13 +56,13 @@ stackoverflow = "9162021"
 
 
 # To add google analytics
-[extra.analytics]
-google = "<your_gtag>"
+# [extra.analytics]
+# google = "<your_gtag>"
 
 # To add disqus comments
-[extra.commenting]
-disqus = "<your_disqus_shortname>"
+# [extra.commenting]
+# disqus = "<your_disqus_shortname>"
 
 # To enable mapbox maps
-[extra.mapbox]
-access_token = "<your_access_token>"
+# [extra.mapbox]
+# access_token = "<your_access_token>"
