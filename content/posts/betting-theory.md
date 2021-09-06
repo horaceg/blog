@@ -230,7 +230,7 @@ Note that if the bookie is not smart, or that you are dealing with several booki
 
 ## Incompatible events
 
-Let's consider the case when the odds are incoherent. In the case of $A \cap B = \emptyset$, if you chose to bet both on $A$ and $B$ separately, then you can actually (implicitly) bet on $A \cup B$ with the proper stakes proportion. We assume that the bookie offers (incoherent) odds for $A$, $B$, $A \cup B$ and $\overline{A \cup B} = \overline{A} \cap \overline{B}$. This situation never arises in the scope of binary outcomes sports but rather typically in football (soccer): $\{A, B, \overline{A \cup B}\} \cong \{Home, Away, Draw\}$
+Let's consider the case when the odds are incoherent. In the case of $A \cap B = \emptyset$, if you chose to bet both on $A$ and $B$ separately, then you can actually (implicitly) bet on $A \cup B$ with the proper stakes proportion. We assume that the bookie offers (incoherent) odds for $A$, $B$, $A \cup B$ and $\overline{A \cup B} = \overline{A} \cap \overline{B}$. This situation never arises in the scope of binary outcomes sports but rather typically in football (soccer): $\{A, B, \overline{A \cup B}\} \cong \\{Home, Away, Draw\\}$
 
 We introduce proper notation:
 
