@@ -402,7 +402,7 @@ See Shin 1991, Strumbelj 2014 for further analysis.
 
 ## Single event
 
-Observe that for any given event, $\{F^{\pi}\ | \pi \ge 0 \}$ is a convex set:
+Observe that for any given event, $\\{F^{\pi}\ | \pi \ge 0 \\}$ is a convex set:
 
 $\alpha F^{\pi_1} + (1 - \alpha) F^{\pi_2} = F^{\alpha \pi_1 + (1 - \alpha)\pi_2}$.
 
