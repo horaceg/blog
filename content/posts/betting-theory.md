@@ -52,8 +52,7 @@ When there is no possible confusion, we write $G_A \cong G^o_A$ and $F_A \cong F
 # Coherent odds
 
 <!-- [Todo: Quelle est la relation de $\pi$ avec $\hat{p}$ ? qqc à propos de la continuité absolue de $\pi$ par rapport à $p$ et la dérivée de Radon-Nikodym? Voir aussi] -->
-[Todo]
-[Girsanov](https://en.wikipedia.org/wiki/Girsanov_theorem)
+<!-- [Todo [Girsanov](https://en.wikipedia.org/wiki/Girsanov_theorem)] -->
 
 
 ## Coherence
@@ -387,11 +386,11 @@ If we assume that $\pi$ is coherent, it is immediate that we have $\hat{p}\_{\Om
 
 See Shin 1991, Strumbelj 2014 for further analysis.
 
-# Sizing bets
+<!-- # Sizing bets
 
 ## Kelly criterion
 
-[Todo]
+[Todo] -->
 
 # Multiple odds
 
@@ -417,11 +416,11 @@ Also, this trick might be useful to _reduce_ a position to one equivalent bet, o
 
 A more realistic situation arises when we place multiple bets on the same event at different times, while odds have been varying (in-play betting for example). If you did spot value at time $t$ and the odds move in your favour, then you should still bet at time $t + \delta t$. In order to simplify you position, you can virtuallly reduce your two bets to one equivalent bet at odds in-between.
 
-# Odds varying through time
+<!-- # Odds varying through time
 
 [todo]
 
-$\pi_A^t$ represents the inverse-odds through time.
+$\pi_A^t$ represents the inverse-odds through time. -->
 
 # Appendix
 
