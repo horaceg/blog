@@ -172,7 +172,7 @@ We also have the following:
 
 This last formula is crucial to understand fairness. It is useful to hedge your bets with the right amount, since e.g. $-G_A = \frac{o_A}{o\_{\overline{A}}} G\_{\overline{A}}$. More on this at [Negative bets](#negative-bets).
 
-Note that even if bookkeppers were unwilling to make a profit, they don't really know the true probability (is there such a thing?). So the best they can do is to offer odds that are fair for a probability measure $\hat{p}$, that is the reflection of their honest and coherent beliefs. This is equivalent to $\pi = \hat{p}$, and thus to the two following statements:
+Note that even if bookkeepers were unwilling to make a profit, they don't really know the true probability (is there such a thing?). So the best they can do is to offer odds that are fair for a probability measure $\hat{p}$, that is the reflection of their honest and coherent beliefs. This is equivalent to $\pi = \hat{p}$, and thus to the two following statements:
 
 * $\pi$ is coherent (additive), e.g. $\pi$ is a (finite) measure
 
