@@ -1,5 +1,5 @@
 +++
-title = "A betting probabilistic framework"
+title = "A probabilistic betting framework"
 date = 2021-09-06
 
 [taxonomies]
