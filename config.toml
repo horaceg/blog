@@ -34,7 +34,6 @@ navbar_items = [
 ]
 
 
-
 # Add links to favicon, you can use https://realfavicongenerator.net/ to generate favicon for your site
 [extra.favicon]
 favicon_16x16 = "/icons/favicon-16x16.png"
@@ -53,16 +52,3 @@ avatar = "/images/avatar.png"
 github = "horaceg"
 linkedin = "horace-guy"
 stackoverflow = "9162021"
-
-
-# To add google analytics
-# [extra.analytics]
-# google = "<your_gtag>"
-
-# To add disqus comments
-# [extra.commenting]
-# disqus = "<your_disqus_shortname>"
-
-# To enable mapbox maps
-# [extra.mapbox]
-# access_token = "<your_access_token>"
