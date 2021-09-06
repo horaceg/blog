@@ -146,7 +146,13 @@ Let us write what is now trivial:
 
 Note that we always have $F_A + F\_{\overline{A}} = 1 - (\pi_A + \pi\_{\overline{A}})$, even if the odds are uncoherent. However, if the odds are not coherent, we can't say that this quantity is indeed $F\_{\Omega}$. For instance, the bookie could theoretically offer other odds for the event $\Omega$, leading to $\pi\_{\Omega} \neq \pi_A + \pi\_{\overline{A}}$. However, would they really offer such a bet ?
 
-In the following sections, we do not assume coherent odds. However, we use the notations $\hat{\pi}\_{\Omega} := \pi_A + \pi\_{\overline{A}}$ and $\hat{G}\_{\Omega} := \frac{1}{\pi_A + \pi\_{\overline{A}}} - 1$, $\hat{F}\_{\Omega} = 1 - (\pi_A + \pi\_{\overline{A}})$
+In the following sections, we do not assume coherent odds. However, we use the notations 
+
+* $\hat{\pi}\_{\Omega} := \pi_A + \pi\_{\overline{A}}$
+
+* $\hat{G}\_{\Omega} := \frac{1}{\pi_A + \pi\_{\overline{A}}} - 1$
+
+* $\hat{F}\_{\Omega} = 1 - (\pi_A + \pi\_{\overline{A}})$
 
 # Fairness
 
