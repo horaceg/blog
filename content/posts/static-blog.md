@@ -7,7 +7,7 @@ categories = ["meta"]
 tags = ["blog", "CDN", "static", "serverless", "independent"]
 +++
 
-I've been wanting to publish online for some time. I was very young during the wordpress wave, so I was never really drawn into it.
+I've been wanting to publish online for some time. I was very young during the Wordpress wave, so I was never really drawn into it.
 
 # Jekyll
 
@@ -33,13 +33,14 @@ A friend of mine had been excited about [Rust](https://www.rust-lang.org/) for a
 
 With this setup, I had everything I was looking for: 
 - A single binary: no dependencies
+- Blazingly fast
 - [$\KaTeX$](https://katex.org/) support
 - A good search UI & UX
 - Image processing built-in
 - A nice theme
 - [Bulma](https://bulma.io) CSS, easy for the CSS newbie that I am
 
-So i just went for it on a whim. It took me three hours to write my first post, set the dev environment up and deploying it to [Cloudflare Pages](https://developers.cloudflare.com/pages/). 
+So i just went for it on a whim. It took me three hours to write my first post, set the dev environment up and deploying it to [Cloudflare Pages](https://developers.cloudflare.com/pages/). I even have web anayltics for free, _without additional javascript_[^ga-js]: no cookies, yay!
 
 Overall I am very happy with the experience so far. The website could be leaner and faster, but I believe it is fast enough. For now. And it's free (as in beer).
 
@@ -51,3 +52,5 @@ Overall I am very happy with the experience so far. The website could be leaner 
 [^no-pun] No pun intended since Hugo is written in Go.
 
 [^DeepThought] [DeepThought](https://www.getzola.org/themes/deepthought/)
+
+[^ga-js] Actually this theme ships with the Google Analytics script, since there is no tree-shaking nor dead-code elimination (yet)
