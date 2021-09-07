@@ -258,7 +258,7 @@ We have a sure (triple) bet. We will make a profit if and only if this quantity 
 
 This is exactly the same arbitrage formula as before, but with three outcomes.
 
-
+<!-- 
 ## The other side
 
 This time we target $F_C - F_A - F_B$. In this case, we place the following bets:
@@ -267,7 +267,7 @@ $F\_{\overline{A}} = - F_A - (\pi_A + \pi\_{\overline{A}} - 1)$
 
 We use exactly the same formula for $B$, and we get a betting opportunity:
 
-$F\_{\overline{A}} + F\_{\overline{B}} + F_C =$
+$F\_{\overline{A}} + F\_{\overline{B}} + F_C =$ -->
 
 ## General case
 
