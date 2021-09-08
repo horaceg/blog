@@ -1,9 +1,9 @@
 +++
-title = "Using probabilistic programming to assess lockdown policies"
+title = "Bayesian epidemiology"
 date = 2021-09-09
 
 [taxonomies]
-categories = ["ppl"]
+categories = ["probabilistic programming"]
 tags = ["machine learning", "probability", "bayesian", "epidemiology", "kaggle", "ppl", "programming", "probabilistic programming"]
 +++
 
