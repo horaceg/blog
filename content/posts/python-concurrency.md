@@ -8,14 +8,17 @@ categories = ["concurrency"]
 tags = ["python", "programming", "concurrency", "parallelism"]
 +++
 
-I've struggled for a long time with concurrency and parallelism. Let's dive in with the hot-cool-new [ASGI](https://asgi.readthedocs.io/en/latest/) framework, [FastAPI](https://fastapi.tiangolo.com/).
+I've struggled for a long time with concurrency and parallelism. Let's dive in with the hot-cool-new [ASGI](https://asgi.readthedocs.io/en/latest/) framework, [FastAPI](https://fastapi.tiangolo.com/). It is a concurrent framework, which means `asyncio`-friendly. Tiangolo, the author, claims that the performance is on par with Go and Node webservers. We're going to see a glimpse of the reason (spoilers: concurrency).
 
-First things first, let's install FastAPI by following the [guide](https://fastapi.tiangolo.com/#installation). Once this is done, create the following `server.py` file:
+First things first, let's install FastAPI by following the [guide](https://fastapi.tiangolo.com/#installation). 
+
+# Purely IO-bound workloads
+
+We are going to simulate a pure IO operation, such as an waiting for a database to finish its operation. Let's create the following `server.py` file:
 
 ```python
 # server.py
 
-import random
 import time
 
 from fastapi import FastAPI
@@ -42,16 +45,265 @@ You should see at `http://127.0.0.1:8000/wait` something like:
 { "duration": 1 }
 ```
 
-If we want to simply assess the overhead of the HTTP protocol, we can use the apache benchmarking (`ab`) tool with this route:
+Ok, it works. Now, let's dive into the performance comparison. We could use [ApacheBench](https://en.wikipedia.org/wiki/ApacheBench), but here we are going to implement everything in python for the sake of clarity.
 
-```bash
-ab -n 10 127.0.0.1:8000/wait
+Let's create a `client.py` file:
+
+```python
+# client.py
+
+import functools
+import time
+
+import requests
+
+
+def timed(N, url, fn):
+    @functools.wraps(fn)
+    def wrapper(*args, **kwargs):
+        start = time.time()
+        res = fn(*args, **kwargs)
+        stop = time.time()
+        duration = stop - start
+        print(f"{N / duration:.2f} reqs / sec | {N} reqs | {url} | {fn.__name__}")
+        return res
+
+    return wrapper
+
+
+def get(url):
+    resp = requests.get(url)
+    assert resp.status_code == 200
+    return resp.json()
+
+
+def sync_get_all(url, n):
+    l = [get(url) for _ in range(n)]
+    return l
+
+
+def run_bench(n, funcs, urls):
+    for url in urls:
+        for func in funcs:
+            timed(n, url, func)(url, n)
+
+
+if __name__ == "__main__":
+    urls = ["http://127.0.0.1:8000/wait"]
+    funcs = [sync_get_all]
+    run_bench(10, funcs, urls)
 ```
 
-Which gives us a mean overhead of 2.5 ms for 10 sequential requests. Not bad!
-
-Now let's try with _concurrent_ requests:
+Let's run this:
 
 ```bash
-ab -n 10 -c 10 127.0.0.1:8000/wait
+python client.py
 ```
+```
+0.99 reqs / sec | 10 reqs | http://127.0.0.1:8000/wait | sync_get_all
+```
+
+So far, we know that the overhead is sub-10 ms for ten requests, so less than 1ms per request. Cool!
+
+Now, we are going to simulate multiple simultaneous connections. This is usually a problem we want to have: the more users of our web API or app, the more simultaneous requests. The previous test wasn't very realistic: users rarely browse sequentially, but rather appear simultaneously, forming bursts of activity.
+
+We are going to implement concurrent requests using a __threadpool__:
+
+```python
+# client.py
+
+...
+from concurrent.futures import ThreadPoolExecutor as Pool
+...
+
+
+def thread_pool(url, n, limit=None):
+    limit_ = limit or n
+    with Pool(max_workers=limit_) as pool:
+        result = pool.map(get, [url] * n)
+    return result
+
+
+if __name__ == "__main__":
+    urls = ["http://127.0.0.1:8000/wait"]
+    run_bench(10, [sync_get_all, thread_pool], urls)
+```
+We get:
+
+```
+0.99 reqs / sec | 10 reqs | http://127.0.0.1:8000/wait | sync_get_all
+9.56 reqs / sec | 10 reqs | http://127.0.0.1:8000/wait | thread_pool
+```
+
+This looks 10x better! The overhead is of 44 ms for 10 requests, where does that come from?
+
+Also, how come the server was able to answer asynchronously, since we only wrote synchronous (regular) Python code? There are no `async` nor `await`...
+
+Well, this is how FastAPI works behind the scenes: it runs every synchronous request in a threadpool. This (very) nice feature is also a bit dangerous because of the GIL: if one request takes a very long time to be processed with high-CPU activity, in the meantime other requests cannot be processed: priority is given to the computations. We will see [later](#gunicorn-and-multiprocessing) how to take care of this.
+
+Let's lower the duration:
+
+```python, hl_lines=7
+# server.py
+
+...
+
+@app.get("/wait")
+def wait():
+    duration = 0.05
+    time.sleep(duration)
+    return {"duration": duration}
+```
+
+Let's also run the benchmark 100 times:
+
+```python, hl_lines=7
+# client.py
+
+...
+
+if __name__ == "__main__":
+    urls = ["http://127.0.0.1:8000/wait"]
+    run_bench(100, [sync_get_all, thread_pool], urls)
+```
+
+```
+15.91 reqs / sec | 100 reqs | http://127.0.0.1:8000/wait | sync_get_all
+196.06 reqs / sec | 100 reqs | http://127.0.0.1:8000/wait | thread_pool
+```
+
+We can see there is some overhead on the server-side. Indeed, we should have $100 / 0.05 = 2000$ requests per second if everything worked without any friction.
+
+There is another way to declare a route with FastAPI, using the `asyncio` keywords.
+
+```python
+# server.py
+
+import asyncio
+...
+
+@app.get("/asyncwait")
+async def asyncwait():
+    duration = 0.05
+    await asyncio.sleep(duration)
+    return {"duration": duration}
+```
+
+Now just add this route to the client:
+
+```python, hl_lines=4
+# client.py
+
+if __name__ == "__main__":
+    urls = ["http://127.0.0.1:8000/wait", "http://127.0.0.1:8000/asyncwait"]
+    run_bench(10, [sync_get_all, thread_pool], urls)
+```
+
+And run the benchmark:
+
+```
+15.66 reqs / sec | 100 reqs | http://127.0.0.1:8000/wait | sync_get_all
+195.41 reqs / sec | 100 reqs | http://127.0.0.1:8000/wait | thread_pool
+15.52 reqs / sec | 100 reqs | http://127.0.0.1:8000/asyncwait | sync_get_all
+208.06 reqs / sec | 100 reqs | http://127.0.0.1:8000/asyncwait | thread_pool
+```
+
+We see a small improvement. But isn't asyncio supposed to be very performant? And [Uvicorn](https://www.uvicorn.org/) is based on [uvloop](https://github.com/MagicStack/uvloop), described as:
+
+> Ultra fast asyncio event loop. 
+
+Maybe the overhead comes from the client? Threadpools maybe?
+
+To check this, we're going to implement a fully-asynchronous client. This is a bit more _involved_. Yes, this means `async`s and `await`s. I know you secretly enjoy these.
+
+```python
+# client.py
+
+import asyncio
+...
+import aiohttp
+
+...
+
+
+async def aget(session, url):
+    async with session.get(url) as response:
+        assert response.status == 200
+        json = await response.json()
+        return json
+
+
+async def gather_limit(n_workers, *tasks):
+    semaphore = asyncio.Semaphore(n_workers)
+
+    async def sem_task(task):
+        async with semaphore:
+            return await task
+
+    return await asyncio.gather(*(sem_task(task) for task in tasks))
+
+
+async def aget_all(url, n, n_workers=None):
+    limit = n_workers or n
+    async with aiohttp.ClientSession() as session:
+        result = await gather_limit(limit, *[aget(session, url) for _ in range(n)])
+        return result
+
+
+def async_main(url, n):
+    return asyncio.run(aget_all(url, n))
+```
+
+We also add this function to the benchmark. Let's also add a benchmark with 1000 request, just for async methods.
+
+```python, hl_lines=5 7
+# client.py
+
+if __name__ == "__main__":
+    urls = ["http://127.0.0.1:8000/wait", "http://127.0.0.1:8000/asyncwait"]
+    funcs = [sync_get_all, thread_pool, async_main]
+    run_bench(100, funcs, urls)
+    run_bench(1000, [thread_pool, async_main], urls)
+```
+
+The results can be suprising:
+
+```
+15.84 reqs / sec | 100 reqs | http://127.0.0.1:8000/wait | sync_get_all
+191.74 reqs / sec | 100 reqs | http://127.0.0.1:8000/wait | thread_pool
+187.36 reqs / sec | 100 reqs | http://127.0.0.1:8000/wait | async_main
+15.69 reqs / sec | 100 reqs | http://127.0.0.1:8000/asyncwait | sync_get_all
+217.35 reqs / sec | 100 reqs | http://127.0.0.1:8000/asyncwait | thread_pool
+666.23 reqs / sec | 100 reqs | http://127.0.0.1:8000/asyncwait | async_main
+234.24 reqs / sec | 1000 reqs | http://127.0.0.1:8000/wait | thread_pool
+222.16 reqs / sec | 1000 reqs | http://127.0.0.1:8000/wait | async_main
+316.08 reqs / sec | 1000 reqs | http://127.0.0.1:8000/asyncwait | thread_pool
+1031.05 reqs / sec | 1000 reqs | http://127.0.0.1:8000/asyncwait | async_main
+```
+
+It appears that the bottleneck was indeed on the client-side! When both sides are asynchronous - and there is a lot of IO - the speed is impressive!
+
+# CPU-bound workloads
+
+This is all great, until some heavy computation is required. We refer to these as _CPU-bound_ workloads, as opposed to _IO-bound_. Inspired by the legendary David Beazley's [live coding](https://youtu.be/MCs5OvhV9S4), we are going to use a naive implementation of the Fibonacci sequence to perform heavy computations.
+
+```python
+# server.py
+
+...
+
+def fibo(n):
+    if n < 2:
+        return 1
+    else:
+        return fibo(n - 1) + fibo(n - 2)
+
+
+@app.get("/fib/{n}")
+def fib(n: int):
+    return {"fib": fibo(n)}
+```
+
+
+
+# Gunicorn and multiprocessing
