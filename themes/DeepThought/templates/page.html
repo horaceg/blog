@@ -121,19 +121,19 @@
 {% endblock %}
 
 {% block comment %}
-<!-- {% if page.extra.comments and config.extra.commenting.disqus %}
+<!-- {% if page.extra.comments and config.extra.commenting.disqus %} -->
 <section class="section">
   <div class="container">
     <div class="columns is-centered">
       <div class="column is-6">
-        <div id="disqus_thread"></div>
+        <script defer src="https://cdn.commento.io/js/commento.js"></script>
+        <div id="commento"></div>
+        <!-- <div id="disqus_thread"></div> -->
       </div>
     </div>
   </div>
 </section>
-{% endif %} -->
-  <script defer src="https://cdn.commento.io/js/commento.js"></script>
-  <div id="commento"></div>
+<!-- {% endif %} -->
 {% endblock %}
 
 {% block custom_js %}
