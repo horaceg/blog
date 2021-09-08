@@ -4,7 +4,7 @@ date = 2021-09-09
 
 [taxonomies]
 categories = ["probabilistic programming"]
-tags = ["machine learning", "probability", "bayesian", "epidemiology", "kaggle", "ppl", "programming", "probabilistic programming"]
+tags = ["machine learning", "probability", "bayesian", "epidemiology", "kaggle", "probabilistic programming"]
 +++
 
 In March 2020, lockdown measures were implemented all over the world due to the spread of Covid-19. I was at home, a bit bored and I was looking for something to do.
