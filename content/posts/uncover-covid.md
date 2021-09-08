@@ -1,5 +1,5 @@
 +++
-title = "Using Probabilistic programming to assess lockdown policies"
+title = "Using probabilistic programming to assess lockdown policies"
 date = 2021-09-09
 
 [taxonomies]
