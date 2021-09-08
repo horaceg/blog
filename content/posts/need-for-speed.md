@@ -4,7 +4,7 @@ date = 2021-09-03
 
 [taxonomies]
 categories = ["machine learning"]
-tags = ["machine", "learning", "dataviz", "speed", "deployment", "latency"]
+tags = ["machine learning", "dataviz", "speed", "deployment", "latency"]
 +++
 
 Lately, I have been interested in the foundations of machine learning (ML) in a pedagogical perspective. A first step to grasp the power of ML is gradient descent. So, I was determined to demonstrate the way it works with an interactive app.
