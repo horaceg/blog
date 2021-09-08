@@ -1,5 +1,5 @@
 +++
-title = "Things I'm excited about: scientific computing and the web"
+title = "Things I'm excited about"
 date = 2021-09-08
 
 [taxonomies]
