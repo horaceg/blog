@@ -37,7 +37,9 @@ I had a (not so secret) weapon: mobility data.
 
 First I did some exploration and dataviz leveraging the [ACAPS](https://www.acaps.org/covid-19-government-measures-dataset) dataset, Google mobility data and epidemiology data (number of cases, deaths etc.).
 
-I exported a jupyter notebook to html, and since I leveraged [Altair](https://altair-viz.github.io/) based on [Vega-lite](https://vega.github.io/vega-lite/), the data is embedded in the js so it works without a server. Try to interact with the plots in the [exported notebook](/measures_and_rate_explo.html).
+I exported a jupyter notebook to html, and since I leveraged [Altair](https://altair-viz.github.io/) based on [Vega-lite](https://vega.github.io/vega-lite/), the data is embedded in the js so it works without a server. 
+
+<!-- Try to interact with the plots in the [exported notebook](/measures_and_rate_explo.html). -->
 
 
 # Compartmental models
