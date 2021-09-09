@@ -328,7 +328,7 @@ Now, when I open two terminals, running `curl -I http://127.0.0.1:8000/fib/42` i
 
 It's not that bad, but a bit disappointing. Indeed, we have 20x less throughput for the originally most performant one (`asyncwait` route x `async_main` client). 
 
-What's happening here ? In python, there is a [Global Interpreter Lock](https://wiki.python.org/moin/GlobalInterpreterLock)(GIL). If one request takes a very long time to be processed with high-CPU activity, in the meantime other requests cannot be processed as quickly: priority is given to the computations. We will see [later](#gunicorn-and-multiprocessing) how to take care of this.
+What's happening here ? In python, there is a [Global Interpreter Lock](https://wiki.python.org/moin/GlobalInterpreterLock) (GIL). If one request takes a very long time to be processed with high-CPU activity, in the meantime other requests cannot be processed as quickly: priority is given to the computations. We will see [later](#gunicorn-and-multiprocessing) how to take care of this.
 
 For now, we try nested recursive concurrency. Let's add:
 
@@ -441,4 +441,4 @@ Which is on par (if not a bit better!) than with a single Uvicorn process
 
 I wholeheartedly recomment this amazing [live-coding session](https://youtu.be/MCs5OvhV9S4) by David Beazley. Maybe you can google [websockets](https://en.wikipedia.org/wiki/WebSocket) first, just to get that they open a bi-directional channel between client and server.
 
-You can also read [this detailed answer](https://stackoverflow.com/a/60644649/9162021) from stackoverflow to grasp basic differences between concurrency and parallelism in python.
+You can also read [this detailed answer](https://stackoverflow.com/a/60644649/9162021) from stackoverflow to grasp differences between concurrency and parallelism in python.
