@@ -1,5 +1,4 @@
 +++
-draft = true
 title = "Concurrency in Python with FastAPI"
 date = 2021-09-10
 
@@ -105,6 +104,8 @@ python client.py
 
 So far, we know that the overhead is sub-10 ms for ten requests, so less than 1ms per request. Cool!
 
+## Threadpools client-side
+
 Now, we are going to simulate multiple simultaneous connections. This is usually a problem we want to have: the more users of our web API or app, the more simultaneous requests. The previous test wasn't very realistic: users rarely browse sequentially, but rather appear simultaneously, forming bursts of activity.
 
 We are going to implement concurrent requests using a __threadpool__:
@@ -139,7 +140,7 @@ This looks 10x better! The overhead is of 44 ms for 10 requests, where does that
 
 Also, how come the server was able to answer asynchronously, since we only wrote synchronous (regular) Python code? There are no `async` nor `await`...
 
-Well, this is how FastAPI works behind the scenes: it runs every synchronous request in a threadpool.
+Well, this is how FastAPI works behind the scenes: it runs every synchronous request in a threadpool. So, we have threadpools both client-side and __server-side__!
 
 Let's lower the duration:
 
@@ -173,6 +174,8 @@ if __name__ == "__main__":
 ```
 
 We can see there is some overhead on the server-side. Indeed, we should have $100 / 0.05 = 2000$ requests per second if everything worked without any friction.
+
+## `async` routes 
 
 There is another way to declare a route with FastAPI, using the `asyncio` keywords.
 
@@ -213,6 +216,8 @@ We see a small improvement. But isn't asyncio supposed to be very performant? An
 > Ultra fast asyncio event loop. 
 
 Maybe the overhead comes from the client? Threadpools maybe?
+
+## Drinking the `asyncio` kool-aid
 
 To check this, we're going to implement a fully-asynchronous client. This is a bit more _involved_. Yes, this means `async`s and `await`s. I know you secretly enjoy these.
 
@@ -348,7 +353,7 @@ async def asyncfib(n: int):
     return {"fib": res}
 ```
 
-Let's also add a timing [middleware](https://fastapi.tiangolo.com/tutorial/middleware/) to our FastAPI app:
+Let's also add a [timing middleware](https://fastapi.tiangolo.com/tutorial/middleware/) to our FastAPI app:
 
 ```python
 # server.py
@@ -394,9 +399,46 @@ x-process-time: 0.46001315116882324
 {"fib":1346269}⏎                                                                                     
 ```
 
-It's not that bad for $2^30$ overhead. But we see here a limitation of asynchronous IO in Python: the [same code in Julia](https://julialang.org/blog/2019/07/multithreading/) would lead to a speed-up!
+It's not that bad for $2^{30}$ overhead. But we see here a limitation of threads in Python: the [same code in Julia](https://julialang.org/blog/2019/07/multithreading/) would lead to a speed-up (using parallelism)!
 
 
 # Gunicorn and multiprocessing
 
+So far we've used FastAPI with Uvicorn. The latter can be [run with Gunicorn](https://www.uvicorn.org/#running-with-gunicorn). Gunicorn forks a base process into `n` worker processes, and each worker is managed by Uvicorn (with the asynchronous uvloop). Which means:
+- Each worker is concurrent
+- The worker pool implements parallelism
 
+This way, we can have the best of both worlds: concurrency (multithreading) and parallelism (multiprocessing).
+
+Let's try this with the last setup, when we ran the benchmark while asking for the 42th Fibonacci number:
+```bash
+pip install gunicorn
+```
+
+```bash
+gunicorn server:app -w 2 -k uvicorn.workers.UvicornWorker --reload
+```
+
+we get the following results:
+
+```
+19.02 reqs / sec | 100 reqs | http://127.0.0.1:8000/wait | sync_get_all
+216.84 reqs / sec | 100 reqs | http://127.0.0.1:8000/wait | thread_pool
+223.52 reqs / sec | 100 reqs | http://127.0.0.1:8000/wait | async_main
+18.80 reqs / sec | 100 reqs | http://127.0.0.1:8000/asyncwait | sync_get_all
+400.12 reqs / sec | 100 reqs | http://127.0.0.1:8000/asyncwait | thread_pool
+208.68 reqs / sec | 100 reqs | http://127.0.0.1:8000/asyncwait | async_main
+241.06 reqs / sec | 1000 reqs | http://127.0.0.1:8000/wait | thread_pool
+311.40 reqs / sec | 1000 reqs | http://127.0.0.1:8000/wait | async_main
+433.80 reqs / sec | 1000 reqs | http://127.0.0.1:8000/asyncwait | thread_pool
+1275.48 reqs / sec | 1000 reqs | http://127.0.0.1:8000/asyncwait | async_main   
+```
+
+Which is on par (if not a bit better!) than with a single Uvicorn process
+
+
+# Further resources
+
+I wholeheartedly recomment this amazing [live-coding session](https://youtu.be/MCs5OvhV9S4) by David Beazley. Maybe you can google [websockets](https://en.wikipedia.org/wiki/WebSocket) first, just to get that they open a bi-directional channel between client and server.
+
+You can also read [this detailed answer](https://stackoverflow.com/a/60644649/9162021) from stackoverflow to grasp basic differences between concurrency and parallelism in python.
