@@ -436,6 +436,8 @@ we get the following results:
 
 Which is on par (if not a bit better!) than with a single Uvicorn process
 
+The final files (client and server) are available as a [github gist](https://gist.github.com/horaceg/2afe33aff9ba28c36757f52f13edd298)
+
 
 # Further resources
 
