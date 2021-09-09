@@ -139,7 +139,7 @@ This looks 10x better! The overhead is of 44 ms for 10 requests, where does that
 
 Also, how come the server was able to answer asynchronously, since we only wrote synchronous (regular) Python code? There are no `async` nor `await`...
 
-Well, this is how FastAPI works behind the scenes: it runs every synchronous request in a threadpool. This (very) nice feature is also a bit dangerous because of the GIL: if one request takes a very long time to be processed with high-CPU activity, in the meantime other requests cannot be processed: priority is given to the computations. We will see [later](#gunicorn-and-multiprocessing) how to take care of this.
+Well, this is how FastAPI works behind the scenes: it runs every synchronous request in a threadpool.
 
 Let's lower the duration:
 
@@ -215,6 +215,8 @@ We see a small improvement. But isn't asyncio supposed to be very performant? An
 Maybe the overhead comes from the client? Threadpools maybe?
 
 To check this, we're going to implement a fully-asynchronous client. This is a bit more _involved_. Yes, this means `async`s and `await`s. I know you secretly enjoy these.
+
+Just do `pip install aiohttp`, then:
 
 ```python
 # client.py
@@ -304,6 +306,97 @@ def fib(n: int):
     return {"fib": fibo(n)}
 ```
 
+Now, when I open two terminals, running `curl -I http://127.0.0.1:8000/fib/42` in one and `python client.py` in the other, we see the following results:
+
+```
+8.75 reqs / sec | 100 reqs | http://127.0.0.1:8000/wait | sync_get_all
+54.94 reqs / sec | 100 reqs | http://127.0.0.1:8000/wait | thread_pool
+60.64 reqs / sec | 100 reqs | http://127.0.0.1:8000/wait | async_main
+9.52 reqs / sec | 100 reqs | http://127.0.0.1:8000/asyncwait | sync_get_all
+53.02 reqs / sec | 100 reqs | http://127.0.0.1:8000/asyncwait | thread_pool
+46.81 reqs / sec | 100 reqs | http://127.0.0.1:8000/asyncwait | async_main
+72.87 reqs / sec | 1000 reqs | http://127.0.0.1:8000/wait | thread_pool
+122.97 reqs / sec | 1000 reqs | http://127.0.0.1:8000/wait | async_main
+72.36 reqs / sec | 1000 reqs | http://127.0.0.1:8000/asyncwait | thread_pool
+51.73 reqs / sec | 1000 reqs | http://127.0.0.1:8000/asyncwait | async_main
+```
+
+It's not that bad, but a bit disappointing. Indeed, we have 20x less throughput for the originally most performant one (`asyncwait` route x `async_main` client). 
+
+What's happening here ? In python, there is a [Global Interpreter Lock](https://wiki.python.org/moin/GlobalInterpreterLock)(GIL). If one request takes a very long time to be processed with high-CPU activity, in the meantime other requests cannot be processed as quickly: priority is given to the computations. We will see [later](#gunicorn-and-multiprocessing) how to take care of this.
+
+For now, we try nested recursive concurrency. Let's add:
+
+```python
+# server.py
+
+...
+
+
+async def afibo(n):
+    if n < 2:
+        return 1
+    else:
+        fib1 = await afibo(n - 1)
+        fib2 = await afibo(n - 2)
+        return fib1 + fib2
+
+
+@app.get("/asyncfib/{n}")
+async def asyncfib(n: int):
+    res = await afibo(n)
+    return {"fib": res}
+```
+
+Let's also add a timing [middleware](https://fastapi.tiangolo.com/tutorial/middleware/) to our FastAPI app:
+
+```python
+# server.py
+...
+from fastapi import FastAPI, Request
+
+@app.middleware("http")
+async def add_process_time_header(request: Request, call_next):
+    start_time = time.time()
+    response = await call_next(request)
+    process_time = time.time() - start_time
+    response.headers["X-Process-Time"] = str(process_time)
+    return response
+```
+
+Now let's test the speed:
+
+```bash
+curl -D - http://127.0.0.1:8000/fib/30
+```
+``` hl_lines=5
+HTTP/1.1 200 OK
+server: uvicorn
+content-length: 15
+content-type: application/json
+x-process-time: 0.17467308044433594
+
+{"fib":1346269}⏎                                                                                     
+```
+
+And with async:
+
+```bash
+curl -D - http://127.0.0.1:8000/asyncfib/30
+```
+``` hl_lines=5
+HTTP/1.1 200 OK
+server: uvicorn
+content-length: 15
+content-type: application/json
+x-process-time: 0.46001315116882324
+
+{"fib":1346269}⏎                                                                                     
+```
+
+It's not that bad for $2^30$ overhead. But we see here a limitation of asynchronous IO in Python: the [same code in Julia](https://julialang.org/blog/2019/07/multithreading/) would lead to a speed-up!
 
 
 # Gunicorn and multiprocessing
+
+
