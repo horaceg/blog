@@ -381,7 +381,7 @@ content-length: 15
 content-type: application/json
 x-process-time: 0.17467308044433594
 
-{"fib":1346269}⏎                                                                                     
+{"fib":1346269}
 ```
 
 And with async:
@@ -396,7 +396,7 @@ content-length: 15
 content-type: application/json
 x-process-time: 0.46001315116882324
 
-{"fib":1346269}⏎                                                                                     
+{"fib":1346269}
 ```
 
 It's not that bad for $2^{30}$ overhead. But we see here a limitation of threads in Python: the [same code in Julia](https://julialang.org/blog/2019/07/multithreading/) would lead to a speed-up (using parallelism)!
