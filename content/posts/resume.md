@@ -165,3 +165,4 @@ Well, we need to put online an html file, a css file and a pdf file. I use [site
 ## Wrap-up
 
 All in all, I am happy with this new resume. I need to focus more on the content now that I have the template.
+All input files are in the [github repo](https://github.com/horaceg/resume)
