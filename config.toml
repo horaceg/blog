@@ -33,7 +33,7 @@ katex.auto_render = true
 navbar_items = [
  { code = "en", nav_items = [
   { url = "$BASE_URL/", name = "Home" },
-  { url = "https://horaceg.xyz", name= "CV" },
+  { url = "https://resume.horaceg.xyz", name= "CV" },
   { url = "$BASE_URL/posts", name = "Posts" },
   { url = "$BASE_URL/tags", name = "Tags" },
   { url = "$BASE_URL/categories", name = "Categories" },
