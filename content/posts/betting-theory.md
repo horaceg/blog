@@ -246,7 +246,7 @@ $F_A + F_B - F_C = \pi_C - (\pi_A + \pi_B)$
 
 If the "coherent" version of the inverse odds for $C$ are low enough, there is an opportunity. One has to bet with the inverse formula:
 
-$- F_C = F\_{\overline{C}} + (\pi_C + \pi\_{\overline{C}} - 1)$
+$F\_{\overline{C}} = - F_C + (\pi_C + \pi\_{\overline{C}} - 1)$
 
 Consider the betting opportunity:
 
@@ -258,7 +258,6 @@ We have a sure (triple) bet. We will make a profit if and only if this quantity 
 
 This is exactly the same arbitrage formula as before, but with three outcomes.
 
-<!-- 
 ## The other side
 
 This time we target $F_C - F_A - F_B$. In this case, we place the following bets:
@@ -267,7 +266,7 @@ $F\_{\overline{A}} = - F_A - (\pi_A + \pi\_{\overline{A}} - 1)$
 
 We use exactly the same formula for $B$, and we get a betting opportunity:
 
-$F\_{\overline{A}} + F\_{\overline{B}} + F_C =$ -->
+$F\_{\overline{A}} + F\_{\overline{B}} + F_C = 2 - (\pi\_{\overline{A}} + \pi\_{\overline{B}} + \pi\_C)$
 
 ## General case
 
