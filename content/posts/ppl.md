@@ -99,7 +99,7 @@ Fortunately, web standards have emerged and we now have two perfectly suitable t
 
 The main target is WebAssembly (WASM). The advantages is portability: run anywhere, web or native.
 
-The compiler may leverage `binaryen` to compile the PPL to WASM. Then, `wastime` could be used to interpret or compile ahead-of-time (AOT) wasm to native code, or if needed the browser can directly execute the assembly file.
+The compiler may leverage `binaryen` or just the `wasm-encode` Rust crate to compile the PPL to WASM. Then, `wastime` could be used to interpret or compile ahead-of-time (AOT) wasm to native code, or if needed the browser can directly execute the assembly file.
 
 ### WebGPU
 
