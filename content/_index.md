@@ -1,6 +1,4 @@
 +++
-title = "Horace Guy's blog"
-description = ""
+paginate_by = 9
+sort_by = "date"
 +++
-
-**Horace Guy** is a data scientist living in Paris, interested in machine learning, programming, society. He writes [blog posts](/posts) in here `:)`.
