@@ -3,8 +3,8 @@ title = "A probabilistic programming language from the future"
 date = 2022-10-08
 
 [taxonomies]
-categories = ["ppl"]
-tags = ["probability", "programming", "compiler", "ppl", "probabilistic", "web"]
+categories = ["probabilistic programming"]
+tags = ["probability", "programming", "compiler", "ppl", "probabilistic", "probabilistic programming", "web"]
 +++
 
 Lately I've been interested in probabilistic programming languages.
@@ -100,6 +100,15 @@ Fortunately, web standards have emerged and we now have two perfectly suitable t
 The main target is WebAssembly (WASM). The advantages is portability: run anywhere, web or native.
 
 The compiler may leverage `binaryen` or just the `wasm-encode` Rust crate to compile the PPL to WASM. Then, `wastime` could be used to interpret or compile ahead-of-time (AOT) wasm to native code, or if needed the browser can directly execute the assembly file.
+
+Now one conflicting requirement is that the open-source linear algebra libraries such as `BLAS` don't currently support webassembly. However, the new hot BLAS-like framework `BLIS` can be compiled to wasm, see [https://twitter.com/ethanhs/status/1381500487334162432](https://twitter.com/ethanhs/status/1381500487334162432)
+
+The slowdown compared to native code is a bit underwhelming though:
+> - Native zen2 build (with SIMD kernels): 4.154655s
+> - Native generic systemless build: 15.015203s
+> - WASM generic systemless build: 70.516310s
+
+So until someone creates an (SIMD) webassembly kernel for BLIS, it won't be competitive with native.
 
 ### WebGPU
 
