@@ -1,0 +1,92 @@
++++
+title = "Crafting compilers"
+date = 2022-10-23
+
+[taxonomies]
+categories = ["programming"]
+tags = ["programming languages", "compiler", "assembly", "functional", "OCaml"]
++++
+
+TL; DR: My own [code is on github](https://ucsd-cse131-f19.github.io/).
+
+
+For a while now, I've wanted to create my own programming language(s). Just a domain-specific language (DSL) or a general-purpose language, the important part for me is defining a powerful human-computer interface. 
+
+## An attempt at crafting interpreters
+
+Due to the warm reviews, I tried first to read _Crafting Interpreters_ and went though the first chapters, but I was quickly underwhelmed. Indeed I found the following:
+- The language of the first part is Java, which I am not proficient in. I still managed to roughly translate the scanning part to python, but it is not familiar so it adds a difficulty for me. 
+- The imperative, stateful style is hard to wrap one's head around. 
+- In order to have a working interpreter you have to go through the entire first part. 
+- I want to learn assembly, and this book doesn't have any.
+- I am mainly interested in a _compiler_ rather than an interpreter.
+
+All in all, after the Scanning part I was unsatisfied and looked for something else.
+
+## _Compiler Construction_
+
+So I pivoted and instead I went with University of California San Diego's _Compiler Construction_ [course (codename CSE 131) of fall 2019](https://ucsd-cse131-f19.github.io/), taught by Joe Gibbs Politz. Incidentally, he is also part of the [Pyret language crew](https://www.pyret.org/crew/).
+
+It checks almost all of my (digital) boxes: 
+- The code is in OCaml, which I know a bit
+- It goes all the way to Assembly
+- References the classic _Modern compiler implementation in ML_ by Andrew W. Appel (also known as the Tiger book), which is on my to-do list after this course
+- The approach is incremental: at the end of each assignment, I have a fully functional compiler !
+
+The only minor drawback is that I am more interested in ARM or WebAssembly (WASM) than x86_64, because from what I've read x86 is messier than ARM, while WASM is more portable.
+
+I find it rewarding since now, after the first assignment, I have an end-to-end compiler for a calculator with variable. Of course, this is not a full-fledged language but I'm going to incrementally add features. 
+
+I just wish it were a book because I prefer this format to video lectures.
+
+## Modern OCaml
+
+The course leverages basic features of the `OCaml` programming language and relies on makefiles for the build system. I tried to follow the style but unfortunately I didn't get satisfactory intellisense in vscode without `dune`, the newish `OCaml` build system. So I converted everything to use `dune`.  
+Also, for unit test the old `OUnit` is used, so I changed to leverage the more user-friendly and colorful `Alcotest`.
+
+|![terminal output from Alcotest](/images/alcotest.png)|
+|:--:|
+| *Look at this beatiful colorful and explicit output !*|
+
+### Project structure
+
+The structure is the following:
+
+```bash
+~/dev/cse131/pa1 main*
+❯ tree -C
+.
+├── bin
+│   ├── dune
+│   ├── main.c
+│   └── main.ml
+├── dune-project
+├── input
+│   ├── 42.ana
+│   ├── addnums.ana
+│   ├── letdup.ana
+│   ├── letdup_valid.ana
+│   ├── letlet.ana
+│   └── sub1.ana
+├── lib
+│   ├── asm.ml
+│   ├── compile.ml
+│   ├── compile_simple.ml
+│   ├── dune
+│   ├── expr.ml
+│   ├── parser.ml
+│   └── runner.ml
+├── Makefile
+├── output
+├── pa1.opam
+├── README.md
+└── test
+    ├── dune
+    ├── myTests.ml
+    └── test_pa1.ml
+
+5 directories, 23 files
+```
+
+My own [code is on github](https://ucsd-cse131-f19.github.io/).
+
