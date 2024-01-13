@@ -9,8 +9,8 @@ tags = ["programming languages", "compiler", "assembly", "functional", "OCaml"]
 
 TL; DR: My own [code is on github](https://ucsd-cse131-f19.github.io/).
 
-
-For a while now, I've wanted to create my own programming language(s). Just a domain-specific language (DSL) or a general-purpose language, the important part for me is defining a powerful human-computer interface. 
+<!-- 
+For a while now, I've wanted to create my own programming language(s). Just a domain-specific language (DSL) or a general-purpose language, the important part for me is defining a powerful human-computer interface.  -->
 
 ## An attempt at crafting interpreters
 
@@ -33,7 +33,7 @@ It checks almost all of my (digital) boxes:
 - References the classic _Modern compiler implementation in ML_ by Andrew W. Appel (also known as the Tiger book), which is on my to-do list after this course
 - The approach is incremental: at the end of each assignment, I have a fully functional compiler !
 
-The only minor drawback is that I am more interested in ARM or WebAssembly (WASM) than x86_64, because from what I've read x86 is messier than ARM, while WASM is more portable.
+The only minor drawback is that I am more interested in ARM than x86_64, because from what I've read x86 is messier than ARM.
 
 I find it rewarding since now, after the first assignment, I have an end-to-end compiler for a calculator with variable. Of course, this is not a full-fledged language but I'm going to incrementally add features. 
 
