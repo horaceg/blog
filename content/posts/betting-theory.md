@@ -2,12 +2,21 @@
 title = "A probabilistic betting framework"
 date = 2021-09-06
 
+[extra]
+toc = true
+
 [taxonomies]
 categories = ["probability"]
 tags = ["math", "probability", "bets", "theory", "framework"]
 +++
 
 # Introduction
+
+Have you ever placed a bet ? Wondered what the odds actually mean ?
+
+It's all linked to probability.
+
+# Setup
 
 Let us place focus on a betting situation: a bookie offers odds on an event $A$, and on its complementary $\overline{A}$. There can be multiple binary events at the same time (or close). We will then extend to multiple outcomes.
 
