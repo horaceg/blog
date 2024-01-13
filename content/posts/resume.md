@@ -9,7 +9,7 @@ tags = ["HTML", "programming", "CSS", "javascript", "resume", "CV"]
 
 I decided to do my resume since I haven't done it in a while. My old one was based on the latex template _moderncv_. But this time, I wanted to have one _for the web_ that looks good on desktop and mobile, as well as paper (pdf).
 
-TL;DR: [horaceg.xyz](https://horaceg.xyz)
+TL;DR: [resume.horaceg.xyz](https://resume.horaceg.xyz)
 
 ## Inspiration
 
