@@ -9,9 +9,6 @@ tags = ["programming languages", "compiler", "assembly", "functional", "OCaml"]
 
 TL; DR: My own [code is on github](https://ucsd-cse131-f19.github.io/).
 
-<!-- 
-For a while now, I've wanted to create my own programming language(s). Just a domain-specific language (DSL) or a general-purpose language, the important part for me is defining a powerful human-computer interface.  -->
-
 ## An attempt at crafting interpreters
 
 Due to the warm reviews, I tried first to read _Crafting Interpreters_ and went though the first chapters, but I was quickly underwhelmed. Indeed I found the following:
