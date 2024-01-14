@@ -7,16 +7,15 @@ categories = ["programming"]
 tags = ["programming languages", "compiler", "assembly", "functional", "OCaml"]
 +++
 
-TL; DR: My own [code is on github](https://ucsd-cse131-f19.github.io/).
+TL; DR: My own [code is on github](https://github.com/horaceg/cse131).
 
 ## An attempt at crafting interpreters
 
 Due to the warm reviews, I tried first to read _Crafting Interpreters_ and went though the first chapters, but I was quickly underwhelmed. Indeed I found the following:
-- The language of the first part is Java, which I am not proficient in. I still managed to roughly translate the scanning part to python, but it is not familiar so it adds a difficulty for me. 
+- The language of the first part is Java, which I am not proficient in. I still managed to roughly translate the scanning part to python, but I am not familiar with Java so it adds a barrier for me. 
 - The imperative, stateful style is hard to wrap one's head around. 
 - In order to have a working interpreter you have to go through the entire first part. 
 - I want to learn assembly, and this book doesn't have any.
-- I am mainly interested in a _compiler_ rather than an interpreter.
 
 All in all, after the Scanning part I was unsatisfied and looked for something else.
 
@@ -43,7 +42,7 @@ Also, for unit test the old `OUnit` is used, so I changed to leverage the more u
 
 |![terminal output from Alcotest](/images/alcotest.png)|
 |:--:|
-| *Look at this beatiful colorful and explicit output !*|
+| *Look at this colorful and explicit output !*|
 
 ### Project structure
 
@@ -85,5 +84,13 @@ The structure is the following:
 5 directories, 23 files
 ```
 
-My own [code is on github](https://ucsd-cse131-f19.github.io/).
+My own [code is on github](https://github.com/horaceg/cse131).
+
+## Wrap-up
+
+[edit: January 14 2024]
+
+I stopped after the second assignment because the lectures started to get hairy and I got the feeling that everything wasn't recorded. And also because of other constraints (life). Still, the mini-compiler should be functional.
+
+All-in-all, I enjoyed working on this project.
 
