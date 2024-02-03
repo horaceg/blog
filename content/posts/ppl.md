@@ -7,9 +7,7 @@ categories = ["probabilistic programming"]
 tags = ["probability", "programming", "compiler", "ppl", "probabilistic", "probabilistic programming", "web"]
 +++
 
-Lately I've been interested in probabilistic programming languages.
-
-I struggle to precisely target what is the biggest, while doable, achievement I could do. I'm going to introduce what's been boiling in my head.
+Lately I've been interested in probabilistic programming languages (PPL). I was wondering what would a PPL from the future look like ?
 
 # State of the art
 
