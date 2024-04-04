@@ -7,6 +7,8 @@ categories = ["machine learning", "probabilistic programming"]
 tags = ["vae", "machine learning", "probabilistic programming"]
 +++
 
+Disclaimer: this post is heavily based on _Introduction to variational auto-encoders, Kingma & Welling, 2019_[^intro-vae]
+
 # Introduction
 
 As of April 2024, [the VAE Paper](https://arxiv.org/abs/1312.6114) from 2013 has been cited more than 34 thousand times. What can we learn from the variational auto-encoder ? 
