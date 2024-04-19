@@ -283,4 +283,4 @@ If by now you are not at least a little bit Bayesian, you must be deep into the 
 Joke aside, I hope that the mysteries of bayesian inference are now a bit less obscure, and that you will produce lots of great models with probabilistic programming.
 
 
-[^laplace-deepmind](https://github.com/aleximmer/Laplace)
+[^laplace-deepmind] See e.g. [https://github.com/aleximmer/Laplace](https://github.com/aleximmer/Laplace)
