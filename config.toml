@@ -31,13 +31,13 @@ katex.auto_render = true
 
 # Put all your custom variables here
 navbar_items = [
- { code = "en", nav_items = [
-  { url = "$BASE_URL/", name = "Home" },
-  { url = "https://resume.horaceg.xyz", name= "CV" },
-  { url = "$BASE_URL/posts", name = "Posts" },
-  { url = "$BASE_URL/tags", name = "Tags" },
-  { url = "$BASE_URL/categories", name = "Categories" },
- ]},
+    { code = "en", nav_items = [
+        { url = "$BASE_URL/", name = "Home" },
+        { url = "https://resume.horaceg.xyz", name = "CV" },
+        { url = "$BASE_URL/posts", name = "Posts" },
+        { url = "$BASE_URL/tags", name = "Tags" },
+        { url = "$BASE_URL/categories", name = "Categories" },
+    ] },
 ]
 
 
@@ -52,7 +52,7 @@ webmanifest = "/icons/site.webmanifest"
 # Author details
 [extra.author]
 name = "Horace Guy"
-avatar = "/images/avatar.png"
+avatar = "/images/me_kurdish.jpeg"
 
 # Social links
 [extra.social]
