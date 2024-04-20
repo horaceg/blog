@@ -105,6 +105,10 @@ In our case, we are now not restricted to Lasso or Ridge, we can choose any prio
 
 The Expectation-maximization (EM) algorithm can also be used to find the MLE or MAP, if for some reason you can't have the gradient.
 
+If we are true bayesians$^{\mathrm{TM}}$, we need to sample from the posterior to find at least the posterior mean instead of the mode.
+
+<p align="center"><img alt="Meme about Maximum likelihood vs sampling from the posterior" src="/images/meme-drake-mle-posterior-sampling.png"></p>
+
 ## Full posterior inference
 
 Last but not least, posterior inference is about efficiently sampling the posterior distribution. We want to obtain a set of samples on the __typical set__ of the posterior distribution.
@@ -133,6 +137,8 @@ We can also use Variational Inference, where we approximate the posterior densit
 If you need something even more scalable, paying the price of quality, you can use the Laplace approximation[^laplace-deepmind].
 
 The detailed machinery of inference algorithms are out of scope for this blog post, but the workhorse of modern bayesian inference. Indeed, for many problems the inference using e.g. MCMC is very computationally intensive, so other scalable techniques are highly desired.
+
+<p align="center"><img alt="Meme about asking for posterior samples" src="/images/meme-bernie-asking-post-samples.png"></p>
 
 # Back to the repeated coin toss problem
 
