@@ -77,6 +77,8 @@ There are mainly 3 types of inference methods that you can leverage based on the
 - Maximum a posteriori (MAP)
 - Full posterior inference
 
+<p align="center"><img alt="Meme about MLE, MAP and posterior sampling" src="/images/meme-inferences.png"></p>
+
 ## Maximum Likelihood
 
 In this setting, we just optimize the likelihood to get the argmax. In this case, we ignore the prior and the posterior ; hence, we don't really use the inference formula. In this sense, this isn't really a bayesian technique since we don't care about the posterior.
