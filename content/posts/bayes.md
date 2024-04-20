@@ -103,7 +103,7 @@ If you chose instead a Laplace prior, you will find the $L^1$ regularization, i.
 
 In our case, we are now not restricted to Lasso or Ridge, we can choose any prior for the MAP as long as we can take its gradient (assuming we are using an algorithmic differentiation framework such as JAX). How nice ! We are now only constrained by imagination (and tractable probability distributions).
 
-The Expectation-maxization (EM) algorithm can also be used to find the MLE or MAP, if for some reason you can't have the gradient.
+The Expectation-maximization (EM) algorithm can also be used to find the MLE or MAP, if for some reason you can't have the gradient.
 
 ## Full posterior inference
 
