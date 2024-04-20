@@ -152,6 +152,11 @@
 {% endblock %}
 
 {% block custom_js %}
+
+<script src="https://utteranc.es/client.js" repo="horaceg/blog" issue-term="pathname" theme="github-light"
+  crossorigin="anonymous" async>
+  </script>
+
 {% if page.extra.toc %}
 <script type="text/javascript">
   const menuBarHeight = document.querySelector("nav.navbar").clientHeight;
