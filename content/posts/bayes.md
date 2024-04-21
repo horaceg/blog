@@ -248,7 +248,7 @@ mcmc.print_summary()
     
 
 
-We obtain predictions directly with the `Predictive` method. Note that since we simulate one throw, this is a Bernoulli experimemt thus the predictive probability is exactly equal to the mean.
+We obtain predictions directly with the `Predictive` method. Note that since we simulate one toss, this is a Bernoulli experimemt thus the predictive probability is exactly equal to the mean.
 
 
 ```python
@@ -280,7 +280,7 @@ The prior predictive is almost the same since the prior is centered in 1. Howeve
 
 ![Beta posterior](/images/beta-prior/bayes_9_2.svg)
 
-Same as before, since we only simulate one throw, the probability of the next toss being Heads is the mean of the posterior distribution:
+Same as before, since we only simulate one toss, the probability of the next toss being Heads is the mean of the posterior distribution:
 
 ![Posterior probability of heads under a beta prior](/images/beta-prior/bayes_11_1.svg)
 
