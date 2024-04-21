@@ -180,7 +180,7 @@ nb_heads = (tosses == 1).sum()
 total_tosses = tosses.shape[0]
 ```
 
-Then, let's define the model. As discussed above, we use a Uniform prior for the bias of the coin. Then, we use a binomial likelihood. The `nb_heads` parameter use as `obs=nb_heads` in the likelihood allows us to tell the model to condition on this observation for the inference. It parameter is optional because for prediction we don't observe it.
+Then, let's define the model. As discussed above, we use a Uniform prior for the bias of the coin. Then, we use a binomial likelihood. The `nb_heads` parameter use as `obs=nb_heads` in the likelihood allows us to tell the model to condition on this observation for the inference. This parameter is optional because for prediction we don't observe it.
 
 
 ```python
