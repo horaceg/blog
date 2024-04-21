@@ -243,7 +243,7 @@ Number of divergences: 0
     
 
 
-We obtain predictions directly with the `Predictive` method. Note that since we simulate one throw, this is a Bernoulli experimemt thus the predictive probability is exactly equal to the mean.
+We obtain predictions directly with the `Predictive` method. Note that since we simulate one throw, this is a Bernoulli experiment thus the predictive probability is exactly equal to the mean.
 
 
 ```python
