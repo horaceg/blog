@@ -10,8 +10,6 @@ categories = ["probability"]
 tags = ["probability", "bayes", "inference"]
 +++
 
-Is this yet another Introduction to Bayes$^{\mathrm{TM}}$ ? Yes, but this one is special because it is mine.
-
 I first learned about bayesian statistics in a job posting for an internship. At the time, I was about 20 years old and had never heard of it. The concept was so alien to me that I first read _bayesian **interference**_. I figured it had something to do with optics, such as the Michelson interferometer that I (still) fear.
 
 Fast-forward a small decade and I now consider myself a (secular) bayesian. What is bayesian statistics _really_ about ?
@@ -63,7 +61,7 @@ Let $D$ (for _Data_) denote our observed data, for instance $D = (\mathbf{x}, \m
 
 $$p(\theta | D) \propto p(\theta) \times p(D | \theta)$$
 
-The __prior distribution__ $p(\theta)$ is the probability distribution of the unobserved random variable (r.v.) of interest _a priori_, i.e. without having seen any data / observed related r.v. / events. It may include your knowledge about the world.
+The __prior distribution__ $p(\theta)$ is the probability distribution of the unobserved random variable (r.v.) of interest _a priori_, i.e. without having seen any data / observed related r.v. / events. It may reflect your knowledge about the world.
 
 The __likelihood__ $p(D | \theta)$ is the probability of the data conditioned on this unobserved random variable. This may sounds paradoxical: how can we condition on something we don't observe ? Well, remember that this is a function of the unobserved random variable. We can put it another way: If we knew the unobserved variable, how likely would the data (events) we have observed be ?  
 As such, the likelihood is NOT a distribution.
@@ -72,10 +70,10 @@ The __posterior distribution__ $p(\theta | D)$ is what we ultimately care about.
 
 ## What to make of this formula ?
 
-There are mainly 3 types of inference methods that you can leverage based on the above formula:
-- Maximum likelihood estimation (MLE)
-- Maximum a posteriori (MAP)
-- Full posterior inference
+There are mainly 3 types of inference methods that we can leverage based on the above formula:
+- Maximum likelihood estimation (MLE): we seek one point estimate of $\theta$ based on observations and the likelihood
+- Maximum a posteriori (MAP): we seek one point estimate of $\theta$ based on observations and prior knowledge - likelihood and prior
+- Full posterior inference: we seek representative samples from the posterior distribution of $\theta$ based on the inference formula.
 
 <p align="center"><img alt="Meme about MLE, MAP and posterior sampling" src="/images/meme-inferences.png"></p>
 
@@ -97,7 +95,11 @@ A slightly more precise inference technique is to find the argmax of the posteri
 
 As with the likelihood, we use the negative logarithm. Since $\log ab = \log a + \log b$, we want to minize the sum of the NLL and the negative log-prior.
 
-In case of a Gaussian prior centered on 0 (and a Gaussian likelihood as above), we find exactly the $L^2$ regularization framework, that is the Ridge regression. The regularization parameter of the ridge is then equal to the variance of the prior.
+Note that the MAP with a uniform prior is the same as MLE since in this case the log-prior is a constant of $\theta$.
+
+Intuitively, the negative log-prior is a regularization term when we assume a centered random variable.
+
+In case of a centered Gaussian prior (and a Gaussian likelihood as above), we find exactly the $L^2$ regularization framework, that is the Ridge regression. The regularization parameter of the Ridge is then equal to the variance of the prior.
 
 If you chose instead a Laplace prior, you will find the $L^1$ regularization, i.e. the Lasso regression.
 
@@ -120,7 +122,7 @@ In the best situation, we have the (unnormalized) log-posterior function. That i
 
 So we won, right ? We have the function !
 
-Well, not yet. We still have to find the typical set, and sample from this distribution inside this set.
+Well, not yet. We still have to sample from this distribution inside the typical set.
 
 #### The typical set
 
@@ -128,9 +130,9 @@ Well, not yet. We still have to find the typical set, and sample from this distr
 | --------------------------------------------------------------------------------------------------------------------------------------- |
 | <p align="center">from [*A Conceptual Introduction to Hamiltonian Monte Carlo*, Betancourt, 2017](https://arxiv.org/abs/1701.02434)</p> |
 
-In this case, we need to find the typical set AND sample from the distribution inside this typical set. 
+The typical set is the region where we have _both_ high density and high volume. In high dimensions, it is crucial to think about volume, in that regions with high density don't necessarily have high volume. In practice, we find the typical set with the sampling process that explores the parameter space.
 
-A popular algorithm is Markov Chain Monte Carlo (MCMC), where we sample from the posterior by exploring the space in an iterative fashion. Each sample define a state in a markov chain, i.e. a sequential discrete process that has no memory, and we explore the space according to some _step_ function. So we do both finding the typical set and sampling the distribution at the same time, how convenient !
+A popular algorithm is Markov Chain Monte Carlo (MCMC), where we sample from the posterior by exploring the space in an iterative fashion. Each sample define a state in a markov chain, i.e. a sequential discrete process that has no memory, and we explore the space according to some _step_ function.
 
 We can also use Variational Inference, where we approximate the posterior density with a known parameterized family of distributions such as Gaussians that we can optimize with e.g. stochastic gradient descent; in this case, it becomes stochastic variational inference (SVI). Note that the similarity between posterior and the variational distribution is often evaluated with the Kullback-Leibler divergence.
 
@@ -169,7 +171,16 @@ from jax import random
 
 <br>
 
-Let's define the model. As discussed above, we use a Uniform prior for the bias of the coin. Then, we use a binomial likelihood.
+Let's describe the data. Note that here 1 means heads, so that the observations `[1, 1, 1]` map to the realizations of our experiments.
+
+
+```python
+tosses = np.asarray([1, 1, 1])
+nb_heads = (tosses == 1).sum()
+total_tosses = tosses.shape[0]
+```
+
+Then, let's define the model. As discussed above, we use a Uniform prior for the bias of the coin. Then, we use a binomial likelihood. The `nb_heads` parameter use as `obs=nb_heads` in the likelihood allows us to tell the model to condition on this observation for the inference. It parameter is optional because for prediction we don't observe it.
 
 
 ```python
@@ -202,16 +213,7 @@ plt.title(
 ```    
 ![png](/images/bayes_files/bayes_5_1.png)
     
-
-
-Then, let's describe the data. Note that here 1 means heads.
-
-
-```python
-tosses = np.asarray([1, 1, 1])
-nb_heads = (tosses == 1).sum()
-total_tosses = tosses.shape[0]
-```
+Nothing surprising, the prior predictive probability of the next toss being heads is approximately 0.5, since we have a uniform prior i.e. all possible biases are equally likely.
 
 Now let's run the inference using a Markov Chain Monte Carlo (MCMC) algorithm to infer the posterior distribution of the bias of the coin. We also plot this distribution and its mean.
 
