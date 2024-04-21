@@ -164,7 +164,8 @@ import numpyro.distributions as dist
 from numpyro.infer import MCMC, NUTS, Predictive
 from jax import random
 
-%config InlineBackend.figure_format='retina'
+plt.style.use('ggplot')
+%config InlineBackend.figure_format = 'svg'
 ```
 
 </details>
@@ -180,12 +181,12 @@ nb_heads = (tosses == 1).sum()
 total_tosses = tosses.shape[0]
 ```
 
-Then, let's define the model. As discussed above, we use a Uniform prior for the bias of the coin. Then, we use a binomial likelihood. The `nb_heads` parameter use as `obs=nb_heads` in the likelihood allows us to tell the model to condition on this observation for the inference. This parameter is optional because for prediction we don't observe it.
+Then, let us define the model. As discussed above, we use a Uniform prior for the bias of the coin. Then, we use a binomial likelihood. The `nb_heads` parameter use as `obs=nb_heads` in the likelihood allows us to tell the model to condition on this observation for the inference. This parameter is optional because for prediction we don't observe it.
 
 
 ```python
 def model(N, nb_heads=None):
-    p = ny.sample("p_heads", dist.Uniform())
+    p = ny.sample("p_heads", dist.Beta(3, 3))
     ny.sample("nb_heads", dist.Binomial(N, probs=p), obs=nb_heads)
 ```
 
@@ -196,9 +197,9 @@ Let's check a prior predictive simulation, i.e. what we would predict without ha
 prior_predictive = Predictive(model, num_samples=10_000)
 all_prior_samples = prior_predictive(random.PRNGKey(5), N=1)
 plt.hist(all_prior_samples["p_heads"], bins=30)
-plt.title("(Uniform) Prior probability distribution of the bias of the coin p(heads)")
-```
-![png](/images/bayes_files/bayes_4_1.png)
+plt.title("(Beta) Prior probability distribution of the bias of the coin p(heads)")
+```    
+![png](/images/bayes_files/bayes_6_1.svg)
     
 
 
@@ -210,10 +211,12 @@ plt.hist(prior_preds)
 plt.title(
     f"Prior predictive probability of next toss to be Heads is {prior_proba_next_heads:.3f}"
 )
-```    
-![png](/images/bayes_files/bayes_5_1.png)
+``` 
+![png](/images/bayes_files/bayes_7_1.svg)
     
-Nothing surprising, the prior predictive probability of the next toss being heads is approximately 0.5, since we have a uniform prior i.e. all possible biases are equally likely.
+
+
+Nothing surprising, the prior probability of the next toss being heads is approximately 0.5, since we have a uniform prior i.e. all possible biases are equally likely.
 
 Now let's run the inference using a Markov Chain Monte Carlo (MCMC) algorithm to infer the posterior distribution of the bias of the coin. We also plot this distribution and its mean.
 
@@ -229,21 +232,23 @@ plt.title("Posterior distribution of the probability of Heads (bias of the coin)
 mcmc.print_summary()
 ```
 
-```
-sample: 100%|██████████| 11000/11000 [00:01<00:00, 6210.26it/s, 3 steps of size 8.36e-01. acc. prob=0.93]
+    sample: 100%|██████████| 11000/11000 [00:02<00:00, 5274.72it/s, 3 steps of size 1.05e+00. acc. prob=0.92]
+
+
+    
+                    mean       std    median      5.0%     95.0%     n_eff     r_hat
+       p_heads      0.67      0.15      0.68      0.43      0.91   3534.42      1.00
+    
+    Number of divergences: 0
 
 
 
-                mean       std    median      5.0%     95.0%     n_eff     r_hat
-    p_heads      0.80      0.17      0.84      0.56      1.00   3345.11      1.00
-
-Number of divergences: 0
-```
-![png](/images/bayes_files/bayes_9_2.png)
+    
+![png](/images/bayes_files/bayes_9_2.svg)
     
 
 
-We obtain predictions directly with the `Predictive` method. Note that since we simulate one throw, this is a Bernoulli experiment thus the predictive probability is exactly equal to the mean.
+We obtain predictions directly with the `Predictive` method. Note that since we simulate one throw, this is a Bernoulli experimemt thus the predictive probability is exactly equal to the mean.
 
 
 ```python
@@ -254,9 +259,9 @@ plt.hist(preds)
 plt.title(
     f"Posterior probability of next toss to lead to heads is approx. {proba_next_heads:.3f}"
 )
-``` 
-![png](/images/bayes_files/bayes_11_1.png)
+```
     
+![png](/images/bayes_files/bayes_11_1.svg)
 
 
 ## A more realistic Beta prior
@@ -269,15 +274,15 @@ def model(N, nb_heads=None):
     ny.sample("nb_heads", dist.Binomial(N, probs=p), obs=nb_heads)
 ```
 
-![png](/images/bayes_files/beta-prior.png)
+![Beta prior](/images/beta-prior/bayes_6_1.svg)
 
 The prior predictive is almost the same since the prior is centered in 1. However, the posterior distribution is very different:
 
-![alt text](/images/bayes_files/beta-posterior.png)
+![Beta posterior](/images/beta-prior/bayes_9_2.svg)
 
 Same as before, since we only simulate one throw, the probability of the next toss being Heads is the mean of the posterior distribution:
 
-![alt text](/images/bayes_files/beat-posterior-proba-heads.png)
+![Posterior probability of heads under a beta prior](/images/beta-prior/bayes_11_1.svg)
 
 
 # Betting on the outcome
@@ -292,5 +297,6 @@ The fair decimal odds for a given event of probability $p$ can be obtained by ta
 If by now you are not at least a little bit Bayesian, you must be deep into the frequentist cult!
 Joke aside, I hope that the mysteries of bayesian inference are now a bit less obscure, and that you will produce lots of great models with probabilistic programming.
 
+---
 
 [^laplace-deepmind] See e.g. [https://github.com/aleximmer/Laplace](https://github.com/aleximmer/Laplace)
