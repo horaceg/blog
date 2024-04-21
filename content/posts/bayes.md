@@ -189,7 +189,7 @@ def model(N, nb_heads=None):
     ny.sample("nb_heads", dist.Binomial(N, probs=p), obs=nb_heads)
 ```
 
-Let's check a prior predictive simulation, i.e. what we would predict without having seen any data. We simulate 1 throw with 10_000 samples from the prior distribution:
+Let's check a prior predictive simulation, i.e. what we would predict without having seen any data. We simulate 1 toss with 10_000 samples from the prior distribution:
 
 
 ```python
