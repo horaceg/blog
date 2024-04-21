@@ -91,7 +91,7 @@ Note that in the case of a gaussian likelihood, for a regression, the negative l
 
 ## Maximum a posteriori
 
-A slightly more precise inference technique is to find the argmax of the posterior, that is the point that maximizes the posterior distribution. We call this value the __mode__ of the distribution.
+A more precise inference technique is to find the argmax of the posterior, that is the point that maximizes the posterior distribution. We call this value the __mode__ of the distribution.
 
 As with the likelihood, we use the negative logarithm. Since $\log ab = \log a + \log b$, we want to minize the sum of the NLL and the negative log-prior.
 
@@ -144,7 +144,7 @@ The detailed machinery of inference algorithms are out of scope for this blog po
 
 # Back to the repeated coin toss problem
 
-We're going to solve the coin toss problem with Python and Numpyro, a probabilistic programming library based on JAX. We are going to explore MAP and full posterior inference with a MCMC algorithm (in our case the No U-Turn Sampler or NUTS).
+We're going to solve the coin toss problem with Python and Numpyro, a probabilistic programming library based on JAX. We are going to explore full posterior inference with a MCMC algorithm (in our case the No U-Turn Sampler or NUTS).
 
 ## Uniform prior
 
