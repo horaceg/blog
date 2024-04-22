@@ -71,15 +71,15 @@ The __posterior distribution__ $p(\theta | D)$ is what we ultimately care about.
 ## What to make of this formula ?
 
 There are mainly 3 types of inference methods that we can leverage based on the above formula:
-- Maximum likelihood estimation (MLE): we seek one point estimate of $\theta$ based on observations and the likelihood
-- Maximum a posteriori (MAP): we seek one point estimate of $\theta$ based on observations and prior knowledge - likelihood and prior
-- Full posterior inference: we seek representative samples from the posterior distribution of $\theta$ based on the inference formula.
+- __Maximum likelihood estimation (MLE)__: we seek one point estimate of $\theta$ based on observations and the likelihood
+- __Maximum a posteriori (MAP)__: we seek one point estimate of $\theta$ based on observations and prior knowledge - likelihood and prior
+- __Full posterior inference__: we seek representative samples from the posterior distribution of $\theta$ based on the inference formula.
 
 <p align="center"><img alt="Meme about MLE, MAP and posterior sampling" src="/images/meme-inferences.png"></p>
 
 ## Maximum Likelihood
 
-In this setting, we just optimize the likelihood to get the argmax. In this case, we ignore the prior and the posterior ; hence, we don't really use the inference formula. In this sense, this isn't really a bayesian technique since we don't care about the posterior.
+In this setting, we just optimize the likelihood to get the argmax. In this case, we ignore the prior and the posterior ; hence, we don't really use the inference formula. Kevin Murphy refers to MLE and MAP as __poor man's Bayes__.
 
 This method is convenient because we can just optimize the function, with e.g. the gradient, and find the value of $\theta$ that maximizes the likelihood function. We can either compute the gradient in closed form and see where it vanishes, or run an iterative algorithm such as (stochastic) gradient descent.
 
@@ -87,7 +87,7 @@ In practice, we dont maximize the likelihood function but rather we mimize the n
 
 $$NLL(\theta) := - \log p(D | \theta)$$
 
-Note that in the case of a gaussian likelihood, for a regression, the negative log-likelihood is then equal (up to a constant) to the mean-squared error loss function, widely used in machine learning methods.
+Note that in the case of a gaussian likelihood, for a regression, the negative log-likelihood is then equal (up to a constant) to the mean-squared error loss function, widely used in machine learning. In the linear case, this is the _Ordinary Least Squares (OLS)_ method.
 
 ## Maximum a posteriori
 
@@ -95,7 +95,7 @@ A more precise inference technique is to find the argmax of the posterior, that 
 
 As with the likelihood, we use the negative logarithm. Since $\log ab = \log a + \log b$, we want to minize the sum of the NLL and the negative log-prior.
 
-Note that the MAP with a uniform prior is the same as MLE since in this case the log-prior is a constant of $\theta$.
+Note that the MAP with a uniform prior is the same as MLE since in this case the log-prior is a constant with respect to $\theta$.
 
 Intuitively, the negative log-prior is a regularization term when we assume a centered random variable.
 
