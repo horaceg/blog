@@ -138,7 +138,7 @@ We can also use Variational Inference, where we approximate the posterior densit
 
 If you need something even more scalable, paying the price of quality, you can use the Laplace approximation[^laplace-deepmind].
 
-The detailed machinery of inference algorithms are out of scope for this blog post, but the workhorse of modern bayesian inference. Indeed, for many problems the inference using e.g. MCMC is very computationally intensive, so other scalable techniques are highly desired.
+The detailed machinery of inference algorithms are out of scope for this blog post, but the workhorse of modern bayesian inference. Indeed, for many problems the inference using e.g. MCMC is very computationally intensive, so scalable techniques are highly desired.
 
 <p align="center"><img alt="Meme about asking for posterior samples" src="/images/meme-bernie-asking-post-samples.png"></p>
 
