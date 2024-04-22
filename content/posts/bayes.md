@@ -126,9 +126,9 @@ Well, not yet. We still have to sample from this distribution inside the typical
 
 #### The typical set
 
-| ![Typical set](/images/typical-set.png)                                                                                                 |
-| --------------------------------------------------------------------------------------------------------------------------------------- |
-| <p align="center">from [*A Conceptual Introduction to Hamiltonian Monte Carlo*, Betancourt, 2017](https://arxiv.org/abs/1701.02434)</p> |
+| <p align="center"><img alt="Typical set" src="/images/typical-set.png" width="600"/></p>                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <p align="center">In high dimensions a probability density, $\pi(q)$, will concentrate around its mode, but the volume over which we integrate that density, $dq$, is much larger away from the mode. Contributions to any expectation are determined by the product of density and volume, $\pi(q) dq$, which then concentrates in a nearly-singular neighborhood called the typical set (grey). <br> Figure and caption from [*A Conceptual Introduction to Hamiltonian Monte Carlo*, Betancourt, 2017](https://arxiv.org/abs/1701.02434)</p> |
 
 The typical set is the region where we have _both_ high density and high volume. In high dimensions, it is crucial to think about volume, in that regions with high density don't necessarily have high volume. In practice, we find the typical set with the sampling process that explores the parameter space.
 
@@ -186,7 +186,7 @@ Then, let us define the model. As discussed above, we use a Uniform prior for th
 
 ```python
 def model(N, nb_heads=None):
-    p = ny.sample("p_heads", dist.Beta(3, 3))
+    p = ny.sample("p_heads", dist.Uniform())
     ny.sample("nb_heads", dist.Binomial(N, probs=p), obs=nb_heads)
 ```
 
