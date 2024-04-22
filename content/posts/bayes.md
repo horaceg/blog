@@ -55,8 +55,9 @@ $$\mathrm{posterior} \propto \mathrm{prior} \times \mathrm{likelihood}$$
 
 The $\propto$ sign means proportional to, as such $a \propto b$ means $a = C \times b$ for some __constant__ $C$.
 
-In more precise terms, let $\theta$ be the unobserved random variable that we care about (weights & biases in machine learning for instance).   
-Let $p(\theta)$ denote the distribution of $\theta$.  
+In more precise terms, let $\theta$ be the unobserved random variable that we care about (weights & biases in machine learning for instance).    
+Let $p(\theta)$ denote the distribution of $\theta$. More rigorously, $p$ in this post loosely denotes either the probability of an event or the probability density of a random variable. When I write _distribution_ it often means density of the random variable, that are absolutely continuous in this post.
+
 Let $D$ (for _Data_) denote our observed data, for instance $D = (\mathbf{x}, \mathbf{y}) = (x_i, y_i)_i$ for a regression or classification problem. Then the above formula can be written more precisely:
 
 $$p(\theta | D) \propto p(\theta) \times p(D | \theta)$$
