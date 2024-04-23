@@ -225,96 +225,10 @@ Note that if the bookie is not smart, or that you are dealing with several booki
 
 # Incoherent odds
 
-## Incompatible events
+In the case of incoherent odds, a bettor can build a _dutch book_ against the bookie, that is a set of bets that constitutes a surebet. That is, provided the bookie offers odds on all relevant events, which they don't in practice to avoid this situation.
 
-Let's consider the case when the odds are incoherent. In the case of $A \cap B = \emptyset$, if you chose to bet both on $A$ and $B$ separately, then you can actually (implicitly) bet on $A \cup B$ with the proper stakes proportion. We assume that the bookie offers (incoherent) odds for $A$, $B$, $A \cup B$ and $\overline{A \cup B} = \overline{A} \cap \overline{B}$. This situation never arises in the scope of binary outcomes sports but rather typically in football (soccer): $\{A, B, \overline{A \cup B}\} \cong \\{Home, Away, Draw\\}$
+See [Appendix](#appendix) for the construction of surebets with the help of reversing (negative) bets.
 
-We introduce proper notation:
-
-* $C := A \cup B$
-
-We want to compare $F_A + F_B$ and $F_C$.
-
-## One side
-
-We compute the theoretical sum of a positive and a negative bet: 
-
-$F_A + F_B - F_C = \pi_C - (\pi_A + \pi_B)$
-
-If the "coherent" version of the inverse odds for $C$ are low enough, there is an opportunity. One has to bet with the inverse formula:
-
-$F\_{\overline{C}} = - F_C + (\pi_C + \pi\_{\overline{C}} - 1)$
-
-Consider the betting opportunity:
-
-* $\hat{F}\_{\Omega} := F_A + F_B + F\_{\overline{C}} = (\pi_C - \pi_A - \pi_B )- (\pi_C + \pi\_{\overline{C}} - 1) = 1 - (\pi_A + \pi_B + \pi\_{\overline{C}})$
-
-We have a sure (triple) bet. We will make a profit if and only if this quantity is positive, i. e.:
-
-* $\hat{\pi}\_{\Omega} := \pi_A + \pi_B + \pi\_{\overline{C}} < 1$
-
-This is exactly the same arbitrage formula as before, but with three outcomes.
-
-## The other side
-
-This time we target $F_C - F_A - F_B$. In this case, we place the following bets:
-
-$F\_{\overline{A}} = - F_A - (\pi_A + \pi\_{\overline{A}} - 1)$
-
-We use exactly the same formula for $B$, and we get a betting opportunity:
-
-$F\_{\overline{A}} + F\_{\overline{B}} + F_C = 2 - (\pi\_{\overline{A}} + \pi\_{\overline{B}} + \pi\_C)$
-
-## General case
-
-This time, we do not assume $A \cap B = \emptyset$.
-
-We leverage the following: 
-
-* $1\_{A \cap B} = 1_A + 1_B - 1\_{A \cup B}$ i.e. $1_D = 1_A + 1_B - 1_C$
-
-* $1\_{A \cap B} = 1_A 1_B$.
-
-Let $D := A \cap B$.
-
-We essentially want to compare $F_D$ and $F_A + F_B - F_C$.
-
-Then, consider the following pseudo-bet with the pseudo-odds $\pi_A + \pi_B - \pi_C$:
-
-$F_A + F_B - F_C = \mathbf{1}_A + \mathbf{1}_B - \mathbf{1}_C - (\pi_A + \pi_B - \pi_C)$
-
-Now we need to compare this to 
-
-$F_D = \mathbf{1}_A + \mathbf{1}_B - \mathbf{1}_C - \pi_D$
-
-### One side
-
-First, we target $F_A + F_B - F_C - F_D$. In order to actually place an approximation of this bet, we need to reverse the two negative bets $-F_C$ and $-F_D$.
-
-First we have:
-
-$F\_{\overline{C}} = - \mathbf{1}_C + \pi_C + 1 - (\pi_C + \pi\_{\overline{C}}) = - \mathbf{1}_C + 1 - \pi\_{\overline{C}}$
-
-
-With the same reasoning, we have use $F\_{\overline{D}} = - F\_{D} - (\pi_D + \pi\_{\overline{D}} - 1) = - (\mathbf{1}_A + \mathbf{1}_B - \mathbf{1}_C) + 1 - \pi\_{\overline{D}}$.
-
-We get the sure bet combinations:
-
-$\hat{F}\_{\epsilon_1} := F_A + F_B + F\_{\overline{C}} + F\_{\overline{D}} = 2 - (\pi_A + \pi_B - \pi\_{\overline{C}} - \pi\_{\overline{D}})$
-
-
-### The other side
-
-Consider the opposite quantity:
-
-$F_D + F_C - F_A - F_B$
-
-We need to reverse the bets on A and B to get a sure bet:
-
-$\hat{F}\_{\epsilon_2} := F\_{\overline{A}} + F\_{\overline{B}} + F_C + F_D = 2 - (\pi_C + \pi_D - \pi\_{\overline{A}} - \pi\_{\overline{B}})$
-
-
-Provided we can place bets on $A$, $B$, $\overline{C} = \overline{A \cup B} = \overline{A} \cap \overline{B}$ and $\overline{D} = \overline{A \cap B} = \overline{A} \cup \overline{B}$, we need to check the two above-mentioned quantities. However, it is usually not possible to compose bets in such a fashion: the bookies does not offer any bet on $\overline{A} \cup \overline{B}$.
 
 <!-- 
 ### Compatible events
@@ -359,7 +273,7 @@ If we think like a bookie, here are our tasks in order to thrive:
 * $\miF\_{\pi_A, \pi\_{\overline{A}}} \hat{p}_A - \pi_A + \hat{p}\_{\overline{A}} - \pi\_{\overline{A}}$
 * $\max\_{\pi_A, \pi\_{\overline{A}}}|\pi_A + \pi\_{\overline{A}}|$ -->
 
-As a bookie, you want to minimize the _risk_, i.e. the largest sum of money you could potentially lose. Consider for example that a large number of people do bet on an unlikely outcome, with high odds, and this event realizes. In order to avoid this, the bookie can intentionally skew the odds while realizing that many people (or few people with large sums of money) are betting on this outcome. This can also mean that there is a value opportunity for bettors, i.e. that the odds are not set properly. In this example, the bookie can monitor the volume of bets, while computing the risk, and decrease it when it is too high by decreasing the corresponding odds and increasing the odds of opposite events, in order to attract bettors. He can also place bets at another bookie in order to hedge, although this is probably not favoured in a context of fierce competition.
+As a bookie, you want to minimize the _risk_, i.e. the largest sum of money you could potentially lose. Consider for example that a large number of people do bet on an unlikely outcome, with high odds, and this event realizes. In order to avoid this, the bookie can intentionally skew the odds while realizing that many people (or few people with large sums of money) are betting on this outcome. This can also mean that there is a value opportunity for bettors, i.e. that the odds are not set properly. In this example, the bookie can monitor the volume of bets, while computing the risk, and decrease it when it is too high by decreasing the corresponding odds and increasing the odds of opposite events, in order to attract bettors. He can also place bets at another bookie in order to hedge.
 
 <!-- 
 The above discussion is valid for bookies, but also for players that want to play seriously, that is invest large sums of money in the market. Even if you can't set the odds, eventually it is the same: you have your estimates of the true probability, another player has his, and you confront them. Bookies that set the odds need to be careful to balance their books in order not to create a _dutch book_ against them. -->
@@ -456,3 +370,96 @@ A probablity $p$ defined on any $A \subset \Omega$ is a finite measure that sati
 * $\mathbb{E}_p[F_A] = p_A - \pi_A$
 
 * $\mathbb{V}_p(F_A) = p_A (1 - p_A)$
+
+## Surebets on an incoherent book
+
+### Incompatible events
+
+Let's consider the case when the odds are incoherent. In the case of $A \cap B = \emptyset$, if you chose to bet both on $A$ and $B$ separately, then you can actually (implicitly) bet on $A \cup B$ with the proper stakes proportion. We assume that the bookie offers (incoherent) odds for $A$, $B$, $A \cup B$ and $\overline{A \cup B} = \overline{A} \cap \overline{B}$. This situation never arises in the scope of binary outcomes sports but rather typically in football (soccer): $\{A, B, \overline{A \cup B}\} \cong \\{Home, Away, Draw\\}$
+
+We introduce proper notation:
+
+* $C := A \cup B$
+
+We want to compare $F_A + F_B$ and $F_C$.
+
+#### One side
+
+We compute the theoretical sum of a positive and a negative bet: 
+
+$F_A + F_B - F_C = \pi_C - (\pi_A + \pi_B)$
+
+If the "coherent" version of the inverse odds for $C$ are low enough, there is an opportunity. One has to bet with the inverse formula:
+
+$F\_{\overline{C}} = - F_C + (\pi_C + \pi\_{\overline{C}} - 1)$
+
+Consider the betting opportunity:
+
+* $\hat{F}\_{\Omega} := F_A + F_B + F\_{\overline{C}} = (\pi_C - \pi_A - \pi_B )- (\pi_C + \pi\_{\overline{C}} - 1) = 1 - (\pi_A + \pi_B + \pi\_{\overline{C}})$
+
+We have a sure (triple) bet. We will make a profit if and only if this quantity is positive, i. e.:
+
+* $\hat{\pi}\_{\Omega} := \pi_A + \pi_B + \pi\_{\overline{C}} < 1$
+
+This is exactly the same arbitrage formula as before, but with three outcomes.
+
+#### The other side
+
+This time we target $F_C - F_A - F_B$. In this case, we place the following bets:
+
+$F\_{\overline{A}} = - F_A - (\pi_A + \pi\_{\overline{A}} - 1)$
+
+We use exactly the same formula for $B$, and we get a betting opportunity:
+
+$F\_{\overline{A}} + F\_{\overline{B}} + F_C = 2 - (\pi\_{\overline{A}} + \pi\_{\overline{B}} + \pi\_C)$
+
+### General case
+
+This time, we do not assume $A \cap B = \emptyset$.
+
+We leverage the following: 
+
+* $1\_{A \cap B} = 1_A + 1_B - 1\_{A \cup B}$ i.e. $1_D = 1_A + 1_B - 1_C$
+
+* $1\_{A \cap B} = 1_A 1_B$.
+
+Let $D := A \cap B$.
+
+We essentially want to compare $F_D$ and $F_A + F_B - F_C$.
+
+Then, consider the following pseudo-bet with the pseudo-odds $\pi_A + \pi_B - \pi_C$:
+
+$F_A + F_B - F_C = \mathbf{1}_A + \mathbf{1}_B - \mathbf{1}_C - (\pi_A + \pi_B - \pi_C)$
+
+Now we need to compare this to 
+
+$F_D = \mathbf{1}_A + \mathbf{1}_B - \mathbf{1}_C - \pi_D$
+
+#### One side
+
+First, we target $F_A + F_B - F_C - F_D$. In order to actually place an approximation of this bet, we need to reverse the two negative bets $-F_C$ and $-F_D$.
+
+First we have:
+
+$F\_{\overline{C}} = - \mathbf{1}_C + \pi_C + 1 - (\pi_C + \pi\_{\overline{C}}) = - \mathbf{1}_C + 1 - \pi\_{\overline{C}}$
+
+
+With the same reasoning, we have use $F\_{\overline{D}} = - F\_{D} - (\pi_D + \pi\_{\overline{D}} - 1) = - (\mathbf{1}_A + \mathbf{1}_B - \mathbf{1}_C) + 1 - \pi\_{\overline{D}}$.
+
+We get the sure bet combinations:
+
+$\hat{F}\_{\epsilon_1} := F_A + F_B + F\_{\overline{C}} + F\_{\overline{D}} = 2 - (\pi_A + \pi_B - \pi\_{\overline{C}} - \pi\_{\overline{D}})$
+
+
+#### The other side
+
+Consider the opposite quantity:
+
+$F_D + F_C - F_A - F_B$
+
+We need to reverse the bets on A and B to get a sure bet:
+
+$\hat{F}\_{\epsilon_2} := F\_{\overline{A}} + F\_{\overline{B}} + F_C + F_D = 2 - (\pi_C + \pi_D - \pi\_{\overline{A}} - \pi\_{\overline{B}})$
+
+
+Provided we can place bets on $A$, $B$, $\overline{C} = \overline{A \cup B} = \overline{A} \cap \overline{B}$ and $\overline{D} = \overline{A \cap B} = \overline{A} \cup \overline{B}$, we need to check the two above-mentioned quantities. However, it is usually not possible to compose bets in such a fashion: the bookies does not offer any bet on $\overline{A} \cup \overline{B}$.
