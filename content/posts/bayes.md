@@ -300,4 +300,6 @@ Joke aside, I hope that the mysteries of bayesian inference are now a bit less o
 
 ---
 
+_Many thanks to Théo Stoskopf, Haixuan Xavier Tao, Ai-Jun Tai for their precious feedback on early drafts of this post_
+
 [^laplace-deepmind] See e.g. [https://github.com/aleximmer/Laplace](https://github.com/aleximmer/Laplace)
