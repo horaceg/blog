@@ -1,5 +1,5 @@
 +++
-title = "A probabilistic betting framework"
+title = "Mathematics of bookmaking"
 date = 2021-09-06
 
 [extra]
