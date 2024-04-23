@@ -46,6 +46,18 @@ A bet is _sure_ when its gain is deterministic, i.e. there is not randomness inv
 
 When there is no possible confusion, we write $G_A \cong G^o_A$ and $F_A \cong F^{\pi}_A$
 
+# Basic properties
+
+* $\pi > 0$, $o > 1$
+
+* $\mathbb{E}_p[G_A] = \frac{p_A}{\pi_A} - 1$
+
+* $\mathbb{V}_p(G_A) = \frac{p_A (1 - p_A)}{\pi_A^2}$
+
+* $\mathbb{E}_p[F_A] = p_A - \pi_A$
+
+* $\mathbb{V}_p(F_A) = p_A (1 - p_A)$
+
 # Coherent odds
 
 <!-- [Todo: Quelle est la relation de $\pi$ avec $\hat{p}$ ? qqc à propos de la continuité absolue de $\pi$ par rapport à $p$ et la dérivée de Radon-Nikodym? Voir aussi] -->
