@@ -1,6 +1,6 @@
 +++
 title = "An introduction to bayesian inference"
-date = 2024-04-19
+date = 2024-04-24
 
 [extra]
 toc = true
