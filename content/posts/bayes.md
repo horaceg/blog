@@ -289,9 +289,22 @@ Same as before, since we only simulate one toss, the probability of the next tos
 # Betting on the outcome
 
 As discovered by Bruno De Finetti, our belief about the world should translate into betting odds. In other words, what are the __fair__ odds that you should accept for a given outcome ? 
-The fair decimal odds for a given event of probability $p$ can be obtained by taking $odds = {1 \over p}$
+The fair decimal odds for a given event of probability $p$ can be obtained by taking $odds = {1 \over p}$.
 
-[I wrote a bit more about how to translate probabilities to bets](/posts/betting-theory#fairness)
+## Betting on the next coin toss
+
+In the case of a uniform prior, the probability of the next coin toss leading to Heads is $0.8$, hence odds of ${5 \over 4} = 1.25$.
+
+However, with a $\mathrm{Beta}$ prior, we have a probability of $0.68$, hence odds of $1.47$. Way higher, for the same set of observations !
+
+So, which is the right odds ? __Neither__. Because there are many scenarios, that is many possible biases, that could lead to the sequence _Heads - Heads - Heads_ as the first three tosses. As Michael Betancourt would say, _embracing uncertainty with probability_ is what makes us bayesian. Hence, not focusing on the mean of the posterior distribution of `p_heads` but rather checking the whole extent of the density. This gives us plenty of information, from which we can draw credible intervals if we want.
+
+As Georges Box famously said:
+> All models are wrong, but some are useful.
+
+We could even argue that the _true_ probability of an event doesn't exist, it is merely a way to measure our incomplete information about the world in a specific context. In the real world, there is no probability, only events that happen or don't happen. But what about quantum physics ? Well, we don't deal with such a small scale here so I argue it's irrelevant. We got a bit sidetracked, and to be honest this stuff is over my head.
+
+Note: [I wrote a bit more about how to translate probabilities to bets](/posts/betting-theory#fairness) if you are interested in this stuff.
 
 # Conclusion
 
@@ -300,6 +313,6 @@ Joke aside, I hope that the mysteries of bayesian inference are now a bit less o
 
 ---
 
-_Many thanks to Théo Stoskopf, Haixuan Xavier Tao, Ai-Jun Tai for their precious feedback on early drafts of this post_
+_Many thanks to Théo Stoskopf, Théo Dumont, Haixuan Xavier Tao, Ai-Jun Tai for their precious feedback on early drafts of this post_
 
 [^laplace-deepmind] See e.g. [https://github.com/aleximmer/Laplace](https://github.com/aleximmer/Laplace)
