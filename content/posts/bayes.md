@@ -49,7 +49,7 @@ Intuitively, statistics is about inverse problems : if you have some unobserved 
 
 In Bayesian inference, parameters are random and data is not.
 
-Here is the Bayes formula that we care about in inferential bayesian statistics:
+Here is the formula that we care about in inferential bayesian statistics:
 
 $$\mathrm{posterior} \propto \mathrm{prior} \times \mathrm{likelihood}$$
 
@@ -64,8 +64,8 @@ $$p(\theta | D) \propto p(\theta) \times p(D | \theta)$$
 
 The __prior distribution__ $p(\theta)$ is the probability distribution of the unobserved random variable (r.v.) of interest _a priori_, i.e. without having seen any data / observed related r.v. / events. It may reflect your knowledge about the world.
 
-The __likelihood__ $p(D | \theta)$ is the probability of the data conditioned on this unobserved random variable. This may sounds paradoxical: how can we condition on something we don't observe ? Well, remember that this is a function of the unobserved random variable. We can put it another way: If we knew the unobserved variable, how likely would the data (events) we have observed be ?  
-As such, the likelihood is NOT a distribution.
+The __likelihood__ $p(D | \theta)$ is the probability of the data conditioned on this unobserved random variable. This may sounds paradoxical: how can we condition on something we don't observe ? Well, remember that this is a function of the unobserved random variable. As such, the likelihood is NOT a density, it doesn't integrate to 1. We can put it another way: If we knew the unobserved variable, how likely would the data (events) we have observed be ?
+
 
 The __posterior distribution__ $p(\theta | D)$ is what we ultimately care about. It describes the distribution of the _unobserved_ r.v. $\theta$ condtioning on the data that we've collected, i.e. events that happened.
 
@@ -84,7 +84,7 @@ In this setting, we just optimize the likelihood to get the argmax. In this case
 
 This method is convenient because we can just optimize the function, with e.g. the gradient, and find the value of $\theta$ that maximizes the likelihood function. We can either compute the gradient in closed form and see where it vanishes, or run an iterative algorithm such as (stochastic) gradient descent.
 
-In practice, we dont maximize the likelihood function but rather we mimize the negative log-likelihood function (NLL) with the logarithm function:
+In practice, we dont maximize the likelihood function but rather we minimize the negative log-likelihood function (NLL) with the logarithm function:
 
 $$NLL(\theta) := - \log p(D | \theta)$$
 
@@ -94,17 +94,17 @@ Note that in the case of a gaussian likelihood, for a regression, the negative l
 
 A more precise inference technique is to find the argmax of the posterior, that is the point that maximizes the posterior distribution. We call this value the __mode__ of the distribution.
 
-As with the likelihood, we use the negative logarithm. Since $\log ab = \log a + \log b$, we want to minize the sum of the NLL and the negative log-prior.
+As with the likelihood, we use the negative logarithm. Since $\log ab = \log a + \log b$, we want to minimize the sum of the NLL and the negative log-prior.
 
 Note that the MAP with a uniform prior is the same as MLE since in this case the log-prior is a constant with respect to $\theta$.
 
 Intuitively, the negative log-prior is a regularization term when we assume a centered random variable.
 
-In case of a centered Gaussian prior (and a Gaussian likelihood as above), we find exactly the $L^2$ regularization framework, that is the Ridge regression. The regularization parameter of the Ridge is then equal to the variance of the prior.
+In case of a centered Gaussian prior, we find exactly the $L^2$ regularization framework. If the likelihoods is also Gaussian as above, we find the Ridge regression. The regularization parameter of the Ridge is then equal to the variance of the prior.
 
 If you chose instead a Laplace prior, you will find the $L^1$ regularization, i.e. the Lasso regression.
 
-In our case, we are now not restricted to Lasso or Ridge, we can choose any prior for the MAP as long as we can take its gradient (assuming we are using an algorithmic differentiation framework such as JAX). How nice ! We are now only constrained by imagination (and tractable probability distributions).
+In our case, we are now not restricted to Lasso or Ridge, we can choose any prior for the MAP as long as we can take its gradient (assuming we are using an algorithmic differentiation framework such as JAX). We can also freely pick the likelihood we want. How nice ! We are now only constrained by imagination (and tractable probability distributions).
 
 The Expectation-maximization (EM) algorithm can also be used to find the MLE or MAP, if for some reason you can't have the gradient.
 
