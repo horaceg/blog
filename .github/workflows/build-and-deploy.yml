@@ -33,3 +33,4 @@ jobs:
           projectName: horaceguy
           directory: "_site"
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+
