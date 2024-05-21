@@ -1,0 +1,37 @@
+name: Build and deploy site to cloudflare
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      
+      - name: change directory
+      - run: cd bl/
+
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+      
+      - name: Render website
+        uses: quarto-dev/quarto-actions/render@v2
+
+      - name: Publish to cloudflare
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: jacobdawang
+          directory: "_site"
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
