@@ -1,0 +1,58 @@
+---
+title : "Things I'm excited about"
+author : "Horace Guy"
+date : 2021-09-08
+
+categories : ["programming"]
+tags : ["web", "front-end", "back-end", "future", "scientific computing", "machine learning"]
+---
+
+As a data scientist by day, and tinkerer by night, I am often browsing Hacker News and the like in order to be up-to-date with the latest cool technologies. 
+
+## Python
+
+On the scientific computing side, there is one behemoth: Python. However, it still isn't on par with R for statistics. `Pandas` is often criticized and compared to the supposedly more user-friendly `dplyr`. The GIL prevents true multithreading. There is a fragmented community that can have a hard time understanding each other with the introduction of:
+- Static types
+- [Asynchronous IO](https://en.wikipedia.org/wiki/Asynchronous_I/O) (`asyncio`)
+- Scientific python: 
+    - foundation stack: `numpy`, `pandas`, `matplotlib`, `scipy`, `scikit-learn` 
+    - automatic differentiation stacks: `tensorflow`, `pytorch`, `jax` ...
+
+There are web developers, tinkerers, scientists, machine learning researchers, engineers and even business people are getting up to speed with Python nowadays! This is a wonderful success, and I believe no other programming language has ever been thriving that much. 
+
+It could appear the needs of these communities are disparate: although it might be useful here and there, few scientists will bother with asyncio, since the workloads are mostly [CPU-bound](https://en.wikipedia.org/wiki/CPU-bound).
+
+However, these can mix and match, as we can see with the popularity of [FastAPI](https://fastapi.tiangolo.com/), that leverages static types and concurrent programming, and is used for machine learning REST endpoints at e.g. Uber and Microsoft (as stated in their landing page).
+
+Every day witnesses tens of new Python packages, many of which relate in some way to machine learning. What an exciting time to be a Python dev in machine learning! `:)`
+
+There's one slight problem with this situation though: numerical code in pure python will never be nearly as fast as in a low-level language like C, C++ or Rust. Thus, there will always be a great divide between library developers that need to leverage all the machine hardware, and library users, probably scientists, that won't be able to tinker with the internals. Of course, there are some exceptions but statistically I believe this is true to some degree. I, for one, never once even glanced at some C++ source code of e.g. XLA or `jaxlib`, which I use regularly.
+
+## Julia
+
+[Julia](https://julialang.org/) is also gaining traction, a dozen years after its inception. Very fast once [JIT-compiled](https://en.wikipedia.org/wiki/Just-in-time_compilation), its founders want to solve the two-languages problem in scientific computing: (at least) one low-level language used by library developers for fast numerical computation, e.g. C, C++, Rust, and one language for high-level manipulation, e.g. Python, R, Matlab. 
+
+Julia offers a unified stack in numerical computing, with the ease of manipulation of Matlab for arrays, the development speed of Python, and the speed of C. It already has a vibrant ecosystem of packages, and is better suited than Python for statistics, optimization, differential equations. However, the huge boom right now is in Machine learning, and even though Julia has strong libraries to offer, network effects retain most people on Python.
+
+One promising Julia library is the mysterious [Diffractor.jl](https://github.com/JuliaDiff/Diffractor.jl). Keno Fischer, the author, has gone [deep into Category Theory](https://youtu.be/mQnSRfseu0c) to implement a next-gen (sic!) automatic differenciation system. The potential is huge: imagine you could efficiently differentiate any Julia code! The first thing I will do when it's ready is to implement a [Markov Chain Monte Carlo](https://elevanth.org/blog/2017/11/28/build-a-better-markov-chain/) engine.
+
+## Elixir
+
+Some very skilled colleagues of mine mentioned an emerging programming language: [Elixir](https://elixir-lang.org/). I didn't bother until I discovered that [Jose Valim](https://twitter.com/josevalim) launched the [Numerical Elixir]((https://dashbit.co/blog/nx-numerical-elixir-is-now-publicly-available)) project: 
+- [Nx](https://github.com/elixir-nx/nx), for multi-dimensional arrays 
+- [Axon](https://github.com/elixir-nx/axon), for neural networks
+- [Explorer](https://github.com/elixir-nx/explorer), for dataframes
+
+and a [blog post](https://dashbit.co/blog/announcing-livebook) annoncing an innovative development environment: [Livebook](https://github.com/livebook-dev/livebook)
+
+This has been my gateway drug to web app development. Indeed, I googled Liveview and witnessed Chris McCord [building a Twitter clone](https://youtu.be/MZvmYaFkNJI) in 15 minutes with it. A few days later, I was avidly following Pragmatic Studio's [Liveview course](https://pragmaticstudio.com/courses/phoenix-liveview) and was instantly hooked (no pun intended) on Elixir, Phoenix and Liveview. Stay tuned for new projects!
+
+# Front-end
+
+I want to learn more about the web, _THE_ platform. I have started to [experiment with Svelte](/posts/need-for-speed), and I picked up JS (and HTML) basics along the way.
+
+However, I lack the CSS fundamentals to build a pleasant webpage, which is why I send all my gratitude to the wizards that built all these [amazing open-source Static Site Generators](/posts/static-blog) (SSG) and themes!
+
+When I am ready, [SvelteKit](https://kit.svelte.dev/) will probably have reached 1.0 already and I will be able to make a blog with [MdSvex](https://mdsvex.com/), inserting Svelte components into the articles written in Markdown. I would love to build a cool portfolio like [Markus Hatvan](https://github.com/mhatvan/markushatvan.com).
+
+I am also very intrigued by [Tailwind CSS](https://tailwindcss.com/) which is all the rage right now ; so I don't know if I should learn vanilla CSS or Tailwind first. 

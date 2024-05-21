@@ -1,0 +1,28 @@
+project:
+  type: website
+
+website:
+  title: "Horace Guy's blog"
+  navbar:
+    right:
+      - about.qmd
+      - icon: github
+        href: https://github.com/horaceg
+      - icon: twitter
+        href: https://twitter.com/h0raceguy
+      - icon: linkedin
+        href: https://linkedin.com/in/horace-guy
+      # - icon: stackoverflow
+      #   href: https://stackoverflow.com/9162021
+
+  comments:
+    giscus: 
+      repo: horaceg/blog
+
+format:
+  html:
+    theme: flatly
+    css: styles.css
+    anchor-sections: true
+    highlight-style: github
+

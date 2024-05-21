@@ -1,0 +1,56 @@
+---
+title : "Setting up your own blog"
+author : "Horace Guy"
+date : 2021-09-07
+
+categories : ["meta"]
+tags : ["blog", "CDN", "static", "serverless", "independent"]
+---
+
+I've been wanting to publish online for some time. I was very young during the Wordpress wave, so I was never really drawn into it.
+
+# Jekyll
+
+I learned early about static website, first with [Jekyll](https://jekyllrb.com/) and [Github pages](https://pages.github.com/), in 2016. At the time, I was using Windows 10 and wasn't quite experienced. Since Jekyll is written[^jekyll-author] in Ruby, I needed to bootstrap Ruby and the many gems required to run the blog. It was painful. I couldn't understand the cryptic error messages ; for every update everything broke, I don't think I used [`rbenv`](https://github.com/rbenv/rbenv) at all, etc.[^jekyll-nix]. 
+
+I still managed to publish to Github pages somehow, and I was very proud of it. However, a few days after the first post, I gave up. I still learned to write in Markdown and initiated my software journey. It was somewhat fun to play with the terminal, the filesystem, the web.
+
+# Hugo
+
+Fast-forward three years since my failed attempt. This time, I had some content: a summary of a peculiar political book I was particularly excited about. I also had a bit more experience with the terminal and I was using [Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/install-win10) (WSL) to have a *nix shell available. 
+
+I wrote the post first, in Markdown, then I hunted online for a static site generator (SSG) easier than Jekyll. This is when I found [Hugo](https://gohugo.io/): a single binary and you're good to go![^no-pun]
+
+The next step was finding a good theme. Once I found one that seemed to fit the bill (with e.g. built-in search), I needed to wrestle with git submodules to make it work. 
+
+_In fine_, I managed to publish my content to the world, this time using [Netlify](https://www.netlify.com/) to have more flexibility than Github pages. It worked okay, but I had some troubles with large image files that took a very long time to load. Moreover, the built-in search wasn't very good and I wasn't excited about the whole look of the website.
+
+# Zola
+
+Two years later: here we go again. This time, I have a few years of experience under my belt, I am using Linux as my daily-driver (and MacOS at work). I'm much more comfortable using a terminal and software developemnt in general. 
+
+A friend of mine had been excited about [Rust](https://www.rust-lang.org/) for a while, and I knew that there were some SSGs written in it. So, I browsed [Zola](https://www.getzola.org/) themes hoping to find a decent-looking website. Since there aren't that many themes for Zola, I quickly found a good one[^DeepThought]. 
+
+With this setup, I had everything I was looking for: 
+- A single binary: no dependencies
+- Blazingly fast
+- [$\KaTeX$](https://katex.org/) support
+- A good search UI & UX
+- Image processing built-in
+- A nice theme
+- [Bulma](https://bulma.io) CSS, easy for the CSS newbie that I am
+
+So i just went for it on a whim. It took me three hours to write my first post, set the dev environment up and deploying it to [Cloudflare Pages](https://developers.cloudflare.com/pages/). I even have web anayltics for free, _without additional javascript_[^ga-js]: no cookies, yay!
+
+Overall I am very happy with the experience so far. The website could be leaner and faster, but I believe it is fast enough. For now. And it's free (as in beer).
+
+
+[^jekyll-author] By [Tom Preston-Werner](https://en.wikipedia.org/wiki/Tom_Preston-Werner), founder and former CEO of Github.
+
+[^jekyll-nix] Later on, I [learned](https://youtu.be/USDbjmxEZ_I?t=1544) that I wasn't the only one experiencing this fatigue.
+
+[^no-pun] No pun intended since Hugo is written in Go.
+
+[^DeepThought] [DeepThought](https://www.getzola.org/themes/deepthought/)
+
+[^ga-js] Actually this theme ships with the Google Analytics script, since there is no tree-shaking nor dead-code elimination (yet)
