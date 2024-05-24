@@ -13,7 +13,7 @@ __TL;DR__:
 - [Kaggle submission](https://www.kaggle.com/achyrogue/impact-of-interventions-through-mobility-data)
 - Github [repo](https://github.com/horaceg/uncover)
 
-# Mobility datasets
+## Mobility datasets
 
 [Google](https://www.google.com/covid19/mobility/) and [Apple](https://covid19.apple.com/mobility) published datasets related to (anonymized) activity of smartphones users. They called this _mobility_ data, although this doesn't show trajectories but rather the frequentation of some categories of places, such as grocery stores, residential or workplaces.
 
@@ -21,7 +21,7 @@ At first, there were no csv files, only pdf graphs that did not show raw data. I
 
 The code to do the download + parsing + extraction is available on a [github repo](https://github.com/horaceg/covid19-analysis/tree/master/mobility)
 
-# Uncover challenge
+## Uncover challenge
 
 The [Uncover challenge](https://www.kaggle.com/roche-data-science-coalition/uncover) appeared on Kaggle a few days afterwards. From the description:
 
@@ -33,7 +33,7 @@ The task that immediately caught my attention:
 
 I had a (not so secret) weapon: mobility data.
 
-# Exploration
+## Exploration
 
 First I did some exploration and dataviz leveraging the [ACAPS](https://www.acaps.org/covid-19-government-measures-dataset) dataset, Google mobility data and epidemiology data (number of cases, deaths etc.).
 
@@ -42,16 +42,16 @@ I exported a jupyter notebook to html, and since I leveraged [Altair](https://al
 <!-- Try to interact with the plots in the [exported notebook](/measures_and_rate_explo.html). -->
 
 
-# Compartmental models
+## Compartmental models
 
 Then I found this [Kaggle notebook](https://www.kaggle.com/anjum48/seir-hcd-model) by @anjum48 (_Datasaurus_), published in the Covid forecasting competition (another Kaggle competition). I like the scientific approach: based on well-known [Compartmental models](https://en.wikipedia.org/wiki/Compartmental_models_in_epidemiology#The_SEIR_model) in epidemiology, he extends it to fit the Covid-19 situation.
 
 
-# Recruiting the team
+## Recruiting the team
 
 After this preliminary work, I reach out to two friends for a collaboration: a data scientist and a quant analyst. They were also motivated by the project ! So we went to work on the challenge with this special forces team.
 
-# Probabilistic programming
+## Probabilistic programming
 
 I had heard about bayesian inference before, but did not know how it worked. We decided to explore this path. As a first step, we chose a framework. We went for the young an promising [Numpyro](http://num.pyro.ai/en/stable/getting_started.html), based on [JAX](https://github.com/google/jax/) and made by some of the (very skilled) [Pyro](https://pyro.ai/) authors. This is also how I discovered JAX.
 
@@ -59,11 +59,11 @@ An example in particular seemed to fit our problem: a prey-predator differential
 
 Imperial College in London had already started to publish a series of papers called the [Covid-19 reports](https://www.imperial.ac.uk/mrc-global-infectious-disease-analysis/covid-19/covid-19-reports/). Report 13 was particularly relevant for our challenge, and can be found [here](https://www.imperial.ac.uk/mrc-global-infectious-disease-analysis/covid-19/report-13-europe-npi-impact/).
 
-# Collaborating on a Jupyter notebook
+## Collaborating on a Jupyter notebook
 
 Kaggle required a notebook submission. Collaboration on notebook is particularly challenging: indeed, the JSON format that mixes code and data is not git-friendly. So, I developed a small ipython magic command that allows us to modify code inside a notebook cell, and when executed it saves it into a specific file. The notebook wasn't version-controlled, but every cell snippet was. It wasn't ideal, since the imports were not included in every cell.
 
-# The submission
+## The submission
 
 _In fine_, we implemented bayesian Covid-19 models that perform:
 - An estimation of the effective reproduction number Rt as a function of mobility data and reported deaths

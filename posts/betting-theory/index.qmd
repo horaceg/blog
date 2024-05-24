@@ -9,13 +9,13 @@ categories : ["probability"]
 tags : ["math", "probability", "bets", "theory", "framework"]
 ---
 
-# Introduction
+## Introduction
 
 Have you ever placed a bet ? Wondered what the odds actually mean ?
 
 It's all linked to probability.
 
-# Setup
+## Setup
 
 Let us place focus on a betting situation: a bookie offers odds on an event $A$, and on its complementary $\overline{A}$. There can be multiple binary events at the same time (or close). We will then extend to multiple outcomes.
 
@@ -45,13 +45,13 @@ A bet is _sure_ when its gain is deterministic, i.e. there is not randomness inv
 
 When there is no possible confusion, we write $G_A \cong G^o_A$ and $F_A \cong F^{\pi}_A$
 
-# Coherent odds
+## Coherent odds
 
 <!-- [Todo: Quelle est la relation de $\pi$ avec $\hat{p}$ ? qqc à propos de la continuité absolue de $\pi$ par rapport à $p$ et la dérivée de Radon-Nikodym? Voir aussi] -->
 <!-- [Todo [Girsanov](https://en.wikipedia.org/wiki/Girsanov_theorem)] -->
 
 
-## Coherence
+### Coherence
 
 We say that the odds are _coherent_ for a given bookie, or that a _book_ is coherent, if we have the following:
 
@@ -72,7 +72,7 @@ This last equality shows that the **booksum** is universal. This also allows us 
 Which means that $\pi$ is a measure, and which is finite. 
 
 <!-- 
-## Additional assumptions
+### Additional assumptions
 
 Assume that $\pi$ is usually absolutely continuous with respect to $p$, that is every event with zero probability doesn't have any odds (or odds of $+\infty$, theoretically). 
 
@@ -89,7 +89,7 @@ If we apply the right transformation to $\pi$, we might get (approximately) the 
 
 Note that the popular saying that $\pi \simeq \hat{p}$ is false, since those do not sum to 1. To go further see the [implied probability](#implied-probability) section.
 
-## Product
+### Product
 
 We say that  $A {\perp \!\!\! \perp} B$ (for $\pi$) if we have $\pi_{A \cap B} = \pi_A \pi_B$.
 
@@ -99,7 +99,7 @@ i.e.
 
 * $F_{A \cap B} = (F_A + \pi_A)(F_B + \pi_B) - \pi_A \pi_B$ 
 
-## Additivity
+### Additivity
 
 Let $A$, $B$ such that $A \cap B = \emptyset$. We have : 
 
@@ -113,7 +113,7 @@ In the general case, when $A \cap B \neq \emptyset$, we have:
 
 * $F_A + F_B = F_{A \cap B} + F_{A \cup B}$
 
-## The sure universal bet
+### The sure universal bet
 
 When we apply the additivity formula for $B \leftarrow \overline{A}$, we get:
 
@@ -138,7 +138,7 @@ Let us write what is now trivial:
 * $F_{\Omega} = 1 - \pi_{\Omega}$
 
 
-## Transition
+### Transition
 
 Note that we always have $F_A + F_{\overline{A}} = 1 - (\pi_A + \pi_{\overline{A}})$, even if the odds are uncoherent. However, if the odds are not coherent, we can't say that this quantity is indeed $F_{\Omega}$. For instance, the bookie could theoretically offer other odds for the event $\Omega$, leading to $\pi_{\Omega} \neq \pi_A + \pi_{\overline{A}}$. However, would they really offer such a bet ?
 
@@ -150,7 +150,7 @@ In the following sections, we do not assume coherent odds. However, we use the n
 
 * $\hat{F}_{\Omega} = 1 - (\pi_A + \pi_{\overline{A}})$
 
-# Fairness
+## Fairness
 
 A _fair_ bet implies $\mathbb{E}_p[F_A] = 0$. Since $\mathbb{E}_p[F_A] = p_A - \pi_A$, we then have:
 
@@ -174,7 +174,7 @@ Note that even if bookkeepers were unwilling to make a profit, they don't really
 
 * $\pi_{\Omega} = 1$
 
-# Arbitrage
+## Arbitrage
 
 Let's compute the original hedging quantity that sums to zero in a fair betting situation. Recall that $\hat{G}_{\Omega}$ is the gain of placing a bet on $A$ combined with a bet on $\overline{A}$ with the proper stakes. In an unfair (real) situation, this does not sum to zero.
 
@@ -186,7 +186,7 @@ Moreover, the higher the booksum, the higher the profits for bookies since $\hat
 
 However, since maximizing the booksum means minimizing the average odds, informed bettors will likely place their bets with another bookie. Thus, for the bookie, it is all about maximizing the booksum while still attracting customers, keeping in mind that competitors do the same.
 
-# Value betting
+## Value betting
 
 Let us now consider this _smart bookie_ configuration: $\pi_{\Omega} > 1$. Is there still any opportunity to make money as a bettor (and lose money as a bookie)? Well, _probably_. Recall the expected gains for a given event:
 
@@ -200,7 +200,7 @@ then you should bet. In practice, you should probably look for differences that 
 
 However, in this case there is no sure bet, and hence no sure profit = there is only an estimate of the expectation. Hence, this is much riskier than an arbitrage. In order to make a profit based on this, you need to bet on many opportunities where you find a positive expectation, so that on average your gain should be positive. If you have a robust estimation method, then you will make a profit if you size your bets correctly (see e.g. the Kelly criterion). On the other hand, if you your estimates are often off compared to the bookies', then you will eventually go bankrupt (see the gambler's ruin).
 
-# Negative bets
+## Negative bets
 
 _Negative_ bets are simply when you take the role of the bookie: you offer someone else a bet. Then, their gain is exactly your loss, and vice-versa. Hence, placing a negative bet is simply the opposite of the positive bet that the person takes. But what if you cannot offer someone else a bet at the price you buy it? It is hard to find either a bookie that allows you to take his place, or an exchange that does not take commissions.
 
@@ -222,7 +222,7 @@ where $\epsilon_A = \hat{\pi}_{\Omega} - 1 > 0$. This is the bookie's margin: yo
 
 Note that if the bookie is not smart, or that you are dealing with several bookies at the same time, treating them as one bookie offering the highest odds for any event, you might see an opportunity where $\hat{F}_{\Omega} > 0$, that is $\epsilon_A < 0$. This quantity becomes you sure net gain in this arbitrage case.
 
-# Incoherent odds
+## Incoherent odds
 
 In the case of incoherent odds, a bettor can build a _dutch book_ against the bookie, that is a set of bets that constitutes a surebet. That is, provided the bookie offers odds on all relevant events, which they don't in practice to avoid this situation.
 
@@ -230,13 +230,13 @@ See [Appendix](#appendix) for the construction of surebets with the help of reve
 
 
 <!-- 
-### Compatible events
+#### Compatible events
 
 [WIP]
 
 If we don't necessarily have $A \cap B \neq \emptyset$, then we need to set the pseudo-bet:
 
-## Product
+### Product
 
 [WIP]
 
@@ -257,7 +257,7 @@ Recall the coherent case, and compute the difference:
 * $\pi_C G_C - \pi_A \pi_B [(G_A + 1)(G_B + 1) - 1] = \pi_A \pi_B - \pi_C$ -->
 
 
-# Thinking like a bookie
+## Thinking like a bookie
 <!-- 
 Let us consider the case of an obviously _mispriced_ event: imagine a game of basketball, where there is no draw. Assume that the underdog has lower odds than the favourite: if $A := [ \text{The favourite wins} ]$, $o_A > o_{\overline{A}}$ thus $\pi_A < \pi_{\overline{A}}$. The "true" probabilities are such that $p_A > p(\overline{A})$. Then you just need to bet on the favourite:  -->
 
@@ -277,7 +277,7 @@ As a bookie, you want to minimize the _risk_, i.e. the largest sum of money you 
 <!-- 
 The above discussion is valid for bookies, but also for players that want to play seriously, that is invest large sums of money in the market. Even if you can't set the odds, eventually it is the same: you have your estimates of the true probability, another player has his, and you confront them. Bookies that set the odds need to be careful to balance their books in order not to create a _dutch book_ against them. -->
 
-# Implied probability
+## Implied probability
 
 We want to know the _implied probabilities_ of the odds, the probability estimated by the bookie. We actually need to reverse engineer the recipe that they use in order to maximize profit based on their estimate of the true probabilities, in order to recover them. This is basically an inverse problem.
 
@@ -287,7 +287,7 @@ Denote:
 
 with $\hat{p}_A$ the bookie's (coherent) belief, $\epsilon_A$ the bookie's margin on event A. The bookie certainly hopes that $\epsilon_A > 0$, and tries to do that.
 
-## Basic normalization
+### Basic normalization
 
 An easy technique to get a probability from consistent (and unfair) odds is to normalize the inverse odds:
 
@@ -297,19 +297,19 @@ This assumes that the $\forall A, \epsilon_A = \hat{\pi}_{\Omega} - 1$: the book
 
 If we assume that $\pi$ is coherent, it is immediate that we have $\hat{p}_{\Omega} = 1$ and thus $\hat{p}$ is a probability measure.
 
-## Shin's model
+### Shin's model
 
 See Shin 1991, Strumbelj 2014 for further analysis.
 
-<!-- # Sizing bets
+<!-- ## Sizing bets
 
-## Kelly criterion
+### Kelly criterion
 
 [Todo] -->
 
-# Multiple odds
+## Multiple odds
 
-## Single event
+### Single event
 
 Observe that for any given event, $\\{F^{\pi}\ | \pi \ge 0 \\}$ is a convex set:
 
@@ -331,15 +331,15 @@ Also, this trick might be useful to _reduce_ a position to one equivalent bet, o
 
 A more realistic situation arises when we place multiple bets on the same event at different times, while odds have been varying (in-play betting for example). If you did spot value at time $t$ and the odds move in your favour, then you should still bet at time $t + \delta t$. In order to simplify you position, you can virtuallly reduce your two bets to one equivalent bet at odds in-between.
 
-<!-- # Odds varying through time
+<!-- ## Odds varying through time
 
 [todo]
 
 $\pi_A^t$ represents the inverse-odds through time. -->
 
-# Appendix
+## Appendix
 
-## Measure theory
+### Measure theory
 
 * $\mu (A) = \int_A \mathbf{1}_Ad\mu$
 
@@ -347,7 +347,7 @@ $\pi_A^t$ represents the inverse-odds through time. -->
 
 * $1_{A \cup B} = 1_A + 1_B - 1_{A \cap B}$
 
-## Probability theory
+### Probability theory
 
 A probablity $p$ defined on any $A \subset \Omega$ is a finite measure that satisfies the property $p_{\Omega} = 1$.
 
@@ -358,7 +358,7 @@ A probablity $p$ defined on any $A \subset \Omega$ is a finite measure that sati
 * More generally, we say $X {\perp \!\!\! \perp} Y$ for $p$ iff $E_p[XY] = E_p[X] E_p[Y]$
 
 
-## Basic bets properties
+### Basic bets properties
 
 * $\pi > 0$, $o > 1$
 
@@ -370,9 +370,9 @@ A probablity $p$ defined on any $A \subset \Omega$ is a finite measure that sati
 
 * $\mathbb{V}_p(F_A) = p_A (1 - p_A)$
 
-## Surebets on an incoherent book
+### Surebets on an incoherent book
 
-### Incompatible events
+#### Incompatible events
 
 Let's consider the case when the odds are incoherent. In the case of $A \cap B = \emptyset$, if you chose to bet both on $A$ and $B$ separately, then you can actually (implicitly) bet on $A \cup B$ with the proper stakes proportion. We assume that the bookie offers (incoherent) odds for $A$, $B$, $A \cup B$ and $\overline{A \cup B} = \overline{A} \cap \overline{B}$. This situation never arises in the scope of binary outcomes sports but rather typically in football (soccer): $\{A, B, \overline{A \cup B}\} \cong \\{Home, Away, Draw\\}$
 
@@ -382,7 +382,7 @@ We introduce proper notation:
 
 We want to compare $F_A + F_B$ and $F_C$.
 
-#### One side
+##### One side
 
 We compute the theoretical sum of a positive and a negative bet: 
 
@@ -402,7 +402,7 @@ We have a sure (triple) bet. We will make a profit if and only if this quantity 
 
 This is exactly the same arbitrage formula as before, but with three outcomes.
 
-#### The other side
+##### The other side
 
 This time we target $F_C - F_A - F_B$. In this case, we place the following bets:
 
@@ -412,7 +412,7 @@ We use exactly the same formula for $B$, and we get a betting opportunity:
 
 $F_{\overline{A}} + F_{\overline{B}} + F_C = 2 - (\pi_{\overline{A}} + \pi_{\overline{B}} + \pi_C)$
 
-### General case
+#### General case
 
 This time, we do not assume $A \cap B = \emptyset$.
 
@@ -434,7 +434,7 @@ Now we need to compare this to
 
 $F_D = \mathbf{1}_A + \mathbf{1}_B - \mathbf{1}_C - \pi_D$
 
-#### One side
+##### One side
 
 First, we target $F_A + F_B - F_C - F_D$. In order to actually place an approximation of this bet, we need to reverse the two negative bets $-F_C$ and $-F_D$.
 
@@ -450,7 +450,7 @@ We get the sure bet combinations:
 $\hat{F}_{\epsilon_1} := F_A + F_B + F_{\overline{C}} + F_{\overline{D}} = 2 - (\pi_A + \pi_B - \pi_{\overline{C}} - \pi_{\overline{D}})$
 
 
-#### The other side
+##### The other side
 
 Consider the opposite quantity:
 

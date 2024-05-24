@@ -11,12 +11,12 @@ I've struggled for a long time with concurrency and parallelism. Let's dive in w
 
 First things first, let's install FastAPI by following the [guide](https://fastapi.tiangolo.com/#installation). 
 
-# Purely IO-bound workloads
+## Purely IO-bound workloads
 
 We are going to simulate a pure IO operation, such as an waiting for a database to finish its operation. Let's create the following `server.py` file:
 
 ```python
-# server.py
+## server.py
 
 import time
 
@@ -49,7 +49,7 @@ Ok, it works. Now, let's dive into the performance comparison. We could use [Apa
 Let's create a `client.py` file:
 
 ```python
-# client.py
+## client.py
 
 import functools
 import time
@@ -104,14 +104,14 @@ python client.py
 
 So far, we know that the overhead is sub-10 ms for ten requests, so less than 1ms per request. Cool!
 
-## Threadpools client-side
+### Threadpools client-side
 
 Now, we are going to simulate multiple simultaneous connections. This is usually a problem we want to have: the more users of our web API or app, the more simultaneous requests. The previous test wasn't very realistic: users rarely browse sequentially, but rather appear simultaneously, forming bursts of activity.
 
 We are going to implement concurrent requests using a __threadpool__:
 
 ```python
-# client.py
+## client.py
 
 ...
 from concurrent.futures import ThreadPoolExecutor as Pool
@@ -145,7 +145,7 @@ Well, this is how FastAPI works behind the scenes: it runs every synchronous req
 Let's lower the duration:
 
 ```python
-# server.py
+## server.py
 
 ...
 
@@ -159,7 +159,7 @@ def wait():
 Let's also run the benchmark 100 times:
 
 ```python
-# client.py
+## client.py
 
 ...
 
@@ -175,12 +175,12 @@ if __name__ == "__main__":
 
 We can see there is some overhead on the server-side. Indeed, we should have $100 / 0.05 : 2000$ requests per second if everything worked without any friction.
 
-## `async` routes 
+### `async` routes 
 
 There is another way to declare a route with FastAPI, using the `asyncio` keywords.
 
 ```python
-# server.py
+## server.py
 
 import asyncio
 ...
@@ -195,7 +195,7 @@ async def asyncwait():
 Now just add this route to the client:
 
 ```python
-# client.py
+## client.py
 
 if __name__ == "__main__":
     urls : ["http://127.0.0.1:8000/wait", "http://127.0.0.1:8000/asyncwait"]
@@ -217,14 +217,14 @@ We see a small improvement. But isn't asyncio supposed to be very performant? An
 
 Maybe the overhead comes from the client? Threadpools maybe?
 
-## Drinking the `asyncio` kool-aid
+### Drinking the `asyncio` kool-aid
 
 To check this, we're going to implement a fully-asynchronous client. This is a bit more _involved_. Yes, this means `async`s and `await`s. I know you secretly enjoy these.
 
 Just do `pip install aiohttp`, then:
 
 ```python
-# client.py
+## client.py
 
 import asyncio
 ...
@@ -264,7 +264,7 @@ def async_main(url, n):
 We also add this function to the benchmark. Let's also add a benchmark with 1000 request, just for async methods.
 
 ```python
-# client.py
+## client.py
 
 if __name__ == "__main__":
     urls : ["http://127.0.0.1:8000/wait", "http://127.0.0.1:8000/asyncwait"]
@@ -290,12 +290,12 @@ The results can be suprising:
 
 It appears that the bottleneck was indeed on the client-side! When both sides are asynchronous - and there is a lot of IO - the speed is impressive!
 
-# CPU-bound workloads
+## CPU-bound workloads
 
 This is all great, until some heavy computation is required. We refer to these as _CPU-bound_ workloads, as opposed to _IO-bound_. Inspired by the legendary David Beazley's [live coding](https://youtu.be/MCs5OvhV9S4), we are going to use a naive implementation of the Fibonacci sequence to perform heavy computations.
 
 ```python
-# server.py
+## server.py
 
 ...
 
@@ -333,7 +333,7 @@ What's happening here ? In python, there is a [Global Interpreter Lock](https://
 For now, we try nested recursive concurrency. Let's add:
 
 ```python
-# server.py
+## server.py
 
 ...
 
@@ -356,7 +356,7 @@ async def asyncfib(n: int):
 Let's also add a [timing middleware](https://fastapi.tiangolo.com/tutorial/middleware/) to our FastAPI app:
 
 ```python
-# server.py
+## server.py
 ...
 from fastapi import FastAPI, Request
 
@@ -402,7 +402,7 @@ x-process-time: 0.46001315116882324
 It's not that bad for $2^{30}$ overhead. But we see here a limitation of threads in Python: the [same code in Julia](https://julialang.org/blog/2019/07/multithreading/) would lead to a speed-up (using parallelism)!
 
 
-# Gunicorn and multiprocessing
+## Gunicorn and multiprocessing
 
 So far we've used FastAPI with Uvicorn. The latter can be [run with Gunicorn](https://www.uvicorn.org/#running-with-gunicorn). Gunicorn forks a base process into `n` worker processes, and each worker is managed by Uvicorn (with the asynchronous uvloop). Which means:
 - Each worker is concurrent
@@ -439,7 +439,7 @@ Which is on par (if not a bit better!) than with a single Uvicorn process
 The final files (client and server) are available as a [github gist](https://gist.github.com/horaceg/2afe33aff9ba28c36757f52f13edd298)
 
 
-# Further resources
+## Further resources
 
 I wholeheartedly recomment this amazing [live-coding session](https://youtu.be/MCs5OvhV9S4) by David Beazley. Maybe you can google [websockets](https://en.wikipedia.org/wiki/WebSocket) first, just to get that they open a bi-directional channel between client and server.
 

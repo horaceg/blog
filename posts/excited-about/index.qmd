@@ -47,7 +47,7 @@ and a [blog post](https://dashbit.co/blog/announcing-livebook) annoncing an inno
 
 This has been my gateway drug to web app development. Indeed, I googled Liveview and witnessed Chris McCord [building a Twitter clone](https://youtu.be/MZvmYaFkNJI) in 15 minutes with it. A few days later, I was avidly following Pragmatic Studio's [Liveview course](https://pragmaticstudio.com/courses/phoenix-liveview) and was instantly hooked (no pun intended) on Elixir, Phoenix and Liveview. Stay tuned for new projects!
 
-# Front-end
+## Front-end
 
 I want to learn more about the web, _THE_ platform. I have started to [experiment with Svelte](/posts/need-for-speed), and I picked up JS (and HTML) basics along the way.
 

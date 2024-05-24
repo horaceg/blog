@@ -3,9 +3,20 @@ project:
 
 website:
   title: "Horace Guy's blog"
+  site-url: https://blog.horaceg.xyz
+  description: "Horace Guy's blog about random things"
+  sidebar:
+    contents: auto
   navbar:
     right:
+      - text: Posts
+        href: /
       - about.qmd
+      - text: CV
+        href: https://resume.horaceg.xyz
+        target: _blank
+      - icon: rss
+        href: index.xml
       - icon: github
         href: https://github.com/horaceg
       - icon: twitter
@@ -21,7 +32,7 @@ website:
 
 format:
   html:
-    theme: flatly
+    theme: sketchy
     css: styles.css
     anchor-sections: true
     highlight-style: github

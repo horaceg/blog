@@ -9,7 +9,7 @@ tags : ["programming languages", "compiler", "assembly", "functional", "OCaml"]
 
 TL; DR: My own [code is on github](https://github.com/horaceg/cse131).
 
-## An attempt at crafting interpreters
+### An attempt at crafting interpreters
 
 Due to the warm reviews, I tried first to read _Crafting Interpreters_ and went though the first chapters, but I was quickly underwhelmed. Indeed I found the following:
 - The language of the first part is Java, which I am not proficient in. I still managed to roughly translate the scanning part to python, but I am not familiar with Java so it adds a barrier for me. 
@@ -19,7 +19,7 @@ Due to the warm reviews, I tried first to read _Crafting Interpreters_ and went 
 
 All in all, after the Scanning part I was unsatisfied and looked for something else.
 
-## _Compiler Construction_
+### _Compiler Construction_
 
 So I pivoted and instead I went with University of California San Diego's _Compiler Construction_ [course (codename CSE 131) of fall 2019](https://ucsd-cse131-f19.github.io/), taught by Joe Gibbs Politz. Incidentally, he is also part of the [Pyret language crew](https://www.pyret.org/crew/).
 
@@ -35,7 +35,7 @@ I find it rewarding since now, after the first assignment, I have an end-to-end 
 
 I just wish it were a book because I prefer this format to video lectures.
 
-## Modern OCaml
+### Modern OCaml
 
 The course leverages basic features of the `OCaml` programming language and relies on makefiles for the build system. I tried to follow the style but unfortunately I didn't get satisfactory intellisense in vscode without `dune`, the newish `OCaml` build system. So I converted everything to use `dune`.  
 Also, for unit test the old `OUnit` is used, so I changed to leverage the more user-friendly and colorful `Alcotest`.
@@ -44,7 +44,7 @@ Also, for unit test the old `OUnit` is used, so I changed to leverage the more u
 | :--------------------------------------------: |
 | *Look at this colorful and explicit output !*  |
 
-### Project structure
+#### Project structure
 
 The structure is the following:
 
@@ -86,7 +86,7 @@ The structure is the following:
 
 My own [code is on github](https://github.com/horaceg/cse131).
 
-## Wrap-up
+### Wrap-up
 
 [edit: January 14 2024]
 

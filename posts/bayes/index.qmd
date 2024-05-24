@@ -13,17 +13,17 @@ I first learned about bayesian statistics in a job posting for an internship. At
 
 Fast-forward a small decade and I now consider myself a (secular) bayesian. What is bayesian statistics _really_ about ?
 
-# Bayes' theorem
+## Bayes' theorem
 
 In the beginning of every probability book, you will see Bayes' thoerem for events proudly stated as a direct consequence of the definition of conditional probability and the product (chain) rule. I argue here that it is not really helpful to think of bayes this way. If you wonder what Bayes' theorem is, you can look it up online.
 
-# A biased coin
+## A biased coin
 
 When I was in high school, I remember that we saw in a book that if you toss a coin 3 times and it leads 3 heads, the probability that the next toss will lead head too is ... 0.5 (50%). I was a bit surprised by the result, because I overlooked the crucial fact that we knew the coin was unbiased, i.e. that it always leads to heads with a probability of 0.5.
 
 However, if you don't know if the coin is biased or not, then your belief that the next coin toss is going to lead heads should surely be a little higher than tails. A relevant question you can ask yourself is: at what odds would you accept to bet on tails ? Assuming you want your expected gain to be positive of course.
 
-# The reverend Thomas Bayes
+## The reverend Thomas Bayes
 
 ![Only known portait of possibly Thomas Bayes. 18th century](thomas-bayes.png)
 
@@ -36,13 +36,13 @@ In 1763 was published _An Essay towards solving a Problem in the Doctrine of Cha
 
 Sounds like he was wondering about the coin toss problem ! 
 
-# Inverse probability
+## Inverse probability
 
 During the 18 & 19th century, mathematicians such as Laplace and De Morgan refer to the _inverse probability_ for the probability distribution of an unobserved variable. The term _Bayesian_ was coined by Ronald Fisher in 1950, with the development of frequentism, to refer to the same thing.
 
 Intuitively, statistics is about inverse problems : if you have some unobserved variables and possibly observed variables (often in the form of events), how can you assess the distribution of the unobserved variable ?
 
-# The inference theorem
+## The inference theorem
 
 In Bayesian inference, parameters are random and data is not.
 
@@ -66,7 +66,7 @@ The __likelihood__ $p(D | \theta)$ is the probability of the data conditioned on
 
 The __posterior distribution__ $p(\theta | D)$ is what we ultimately care about. It describes the distribution of the _unobserved_ r.v. $\theta$ condtioning on the data that we've collected, i.e. events that happened.
 
-## What to make of this formula ?
+### What to make of this formula ?
 
 There are mainly 3 types of inference methods that we can leverage based on the above formula:
 - __Maximum likelihood estimation (MLE)__: we seek one point estimate of $\theta$ based on observations and the likelihood
@@ -75,7 +75,7 @@ There are mainly 3 types of inference methods that we can leverage based on the 
 
 ![Meme about MLE, MAP and posterior sampling](meme-inferences.png)
 
-## Maximum Likelihood
+### Maximum Likelihood
 
 In this setting, we just optimize the likelihood to get the argmax. In this case, we ignore the prior and the posterior ; hence, we don't really use the inference formula. Kevin Murphy refers to MLE and MAP as __poor man's Bayes__.
 
@@ -87,7 +87,7 @@ $$NLL(\theta) := - \log p(D | \theta)$$
 
 Note that in the case of a gaussian likelihood, for a regression, the negative log-likelihood is then equal (up to a constant) to the mean-squared error loss function, widely used in machine learning. In the linear case, this is the _Ordinary Least Squares (OLS)_ method.
 
-## Maximum a posteriori
+### Maximum a posteriori
 
 A more precise inference technique is to find the argmax of the posterior, that is the point that maximizes the posterior distribution. We call this value the __mode__ of the distribution.
 
@@ -109,12 +109,12 @@ If we are true bayesians$^{\mathrm{TM}}$, we need to sample from the posterior t
 
 ![Meme about Maximum likelihood vs sampling from the posterior](meme-drake-mle-posterior-sampling.png)
 
-## Full posterior inference
+### Full posterior inference
 
 Last but not least, posterior inference is about efficiently sampling the posterior distribution. We want to obtain a set of samples on the __typical set__ of the posterior distribution.
 This step is usually computationally intensive, as we need to produce enough samples to represent the full probability distribution of the posterior, as opposed to just finding the mode with e.g. MAP.
 
-### Inference techniques
+#### Inference techniques
 
 In the best situation, we have the (unnormalized) log-posterior function. That is, we have a computer function that computes the log-density of the posterior distribution for any $\theta$.
 
@@ -122,7 +122,7 @@ So we won, right ? We have the function !
 
 Well, not yet. We still have to sample from this distribution inside the typical set.
 
-#### The typical set
+##### The typical set
 
 ![In high dimensions a probability density, $\pi(q)$, will concentrate around its mode, but the volume over which we integrate that density, $dq$, is much larger away from the mode. Contributions to any expectation are determined by the product of density and volume, $\pi(q) dq$, which then concentrates in a nearly-singular neighborhood called the typical set (grey). <br> Figure and caption from [*A Conceptual Introduction to Hamiltonian Monte Carlo*, Betancourt, 2017](https://arxiv.org/abs/1701.02434)](typical-set.png){width=600}
 
@@ -139,11 +139,11 @@ The detailed machinery of inference algorithms are out of scope for this blog po
 
 ![Meme about asking for posterior samples](meme-bernie-asking-post-samples.png)
 
-# Back to the repeated coin toss problem
+## Back to the repeated coin toss problem
 
 We're going to solve the coin toss problem with Python and Numpyro, a probabilistic programming library based on JAX. We are going to explore full posterior inference with a MCMC algorithm (in our case the No U-Turn Sampler or NUTS).
 
-## Uniform prior
+### Uniform prior
 
 Let's assume a uniform prior for the bias of the coin, that is _any_ bias is equally likely. Note that you can make one side of a coin heavier, so that it is biased, but I doubt that we could have a coin that always leads heads.
 
@@ -261,7 +261,7 @@ plt.title(
 ![](bayes_files/bayes_11_1.svg)
 
 
-## A more realistic Beta prior
+### A more realistic Beta prior
 
 Let's modify the model with a $\mathrm{Beta}$ prior:
 
@@ -282,12 +282,12 @@ Same as before, since we only simulate one toss, the probability of the next tos
 ![Posterior probability of heads under a beta prior](beta-prior/bayes_11_1.svg)
 
 
-# Betting on the outcome
+## Betting on the outcome
 
 As discovered by Bruno De Finetti, our belief about the world should translate into betting odds. In other words, what are the __fair__ odds that you should accept for a given outcome ? 
 The fair decimal odds for a given event of probability $p$ can be obtained by taking $odds : {1 \over p}$.
 
-## Betting on the next coin toss
+### Betting on the next coin toss
 
 In the case of a uniform prior, the probability of the next coin toss leading to Heads is $0.8$, hence odds of ${5 \over 4} : 1.25$.
 
@@ -302,7 +302,7 @@ We could even argue that the _true_ probability of an event doesn't exist, it is
 
 Note: [I wrote a bit more about how to translate probabilities to bets](/posts/betting-theory#fairness) if you are interested in this stuff.
 
-# Conclusion
+## Conclusion
 
 If by now you are not at least a little bit Bayesian, you must be deep into the frequentist cult!
 Joke aside, I hope that the mysteries of bayesian inference are now a bit less obscure, and that you will produce lots of great models with probabilistic programming.
