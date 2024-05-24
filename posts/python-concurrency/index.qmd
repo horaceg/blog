@@ -3,8 +3,7 @@ title : "Concurrency in Python with FastAPI"
 author : "Horace Guy"
 date : 2021-09-10
 
-categories : ["concurrency"]
-tags : ["python", "programming", "concurrency", "parallelism"]
+categories : ["python", "programming", "concurrency", "parallelism"]
 ---
 
 I've struggled for a long time with concurrency and parallelism. Let's dive in with the hot-cool-new [ASGI](https://asgi.readthedocs.io/en/latest/) framework, [FastAPI](https://fastapi.tiangolo.com/). It is a concurrent framework, which means `asyncio`-friendly. Tiangolo, the author, claims that the performance is on par with Go and Node webservers. We're going to see a glimpse of the reason (spoilers: concurrency).

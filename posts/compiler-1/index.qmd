@@ -3,8 +3,7 @@ title : "Crafting compilers"
 author : "Horace Guy"
 date : 2022-10-23
 
-categories : ["programming"]
-tags : ["programming languages", "compiler", "assembly", "functional", "OCaml"]
+categories : ["programming languages", "compiler", "assembly", "functional", "OCaml", "programming"]
 ---
 
 TL; DR: My own [code is on github](https://github.com/horaceg/cse131).

@@ -3,8 +3,7 @@ title : "Setting up your own blog"
 author : "Horace Guy"
 date : 2021-09-07
 
-categories : ["meta"]
-tags : ["blog", "CDN", "static", "serverless", "independent"]
+categories : ["blog", "CDN", "static", "serverless", "independent", "meta"]
 ---
 
 I've been wanting to publish online for some time. I was very young during the Wordpress wave, so I was never really drawn into it.
