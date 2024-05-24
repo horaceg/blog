@@ -1,3 +1,4 @@
+toc: true
 project:
   type: website
 
@@ -29,7 +30,7 @@ website:
   comments:
     giscus: 
       repo: horaceg/blog
-
+  
 format:
   html:
     theme: sketchy

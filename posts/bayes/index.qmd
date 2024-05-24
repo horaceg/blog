@@ -5,7 +5,7 @@ date : 2024-04-24
 
 toc : true
 
-categories : ["probability", "bayes", "inference"]
+categories : ["probability", "bayes", "inference", "statistic"]
 ---
 
 I first learned about bayesian statistics in a job posting for an internship. At the time, I was about 20 years old and had never heard of it. The concept was so alien to me that I first read _bayesian **interference**_. I figured it had something to do with optics, such as the Michelson interferometer that I (still) fear.
