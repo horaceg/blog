@@ -10,6 +10,9 @@ I decided to do my resume since I haven't done it in a while. My old one was bas
 
 TL;DR: [resume.horaceg.xyz](https://resume.horaceg.xyz)
 
+![The header of my resume](header.png)
+
+
 ## Inspiration
 
 I saw a [blog post](https://blog.chmd.fr/editing-a-cv-in-markdown-with-pandoc.html) by Christophe-Marie Duquesne that seemed to exactly fit the bill. It is even inspired by _moderncv_ !

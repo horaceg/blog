@@ -5,8 +5,7 @@ website:
   title: Regression toward the meaning
   site-url: https://blog.horaceg.xyz
   description: "Horace Guy's blog about random things"
-  # sidebar:
-  #   contents: auto
+  open-graph: true
   navbar:
     background: "#eee"
     title: false
