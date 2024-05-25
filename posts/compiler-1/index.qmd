@@ -1,6 +1,6 @@
 ---
 title : "Crafting compilers"
-author : "Horace Guy"
+
 date : 2022-10-23
 
 categories : ["programming languages", "compiler", "assembly", "functional", "OCaml", "programming"]

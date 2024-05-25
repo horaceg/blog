@@ -1,6 +1,6 @@
 ---
 title : "Things I'm excited about"
-author : "Horace Guy"
+
 date : 2021-09-08
 
 categories : ["web", "front-end", "back-end", "future", "scientific computing", "machine learning", "programming"]

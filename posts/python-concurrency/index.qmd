@@ -1,6 +1,6 @@
 ---
 title : "Concurrency in Python with FastAPI"
-author : "Horace Guy"
+
 date : 2021-09-10
 
 categories : ["python", "programming", "concurrency", "parallelism"]
@@ -21,12 +21,12 @@ import time
 
 from fastapi import FastAPI
 
-app : FastAPI()
+app = FastAPI()
 
 
 @app.get("/wait")
 def wait():
-    duration : 1.
+    duration = 1.
     time.sleep(duration)
     return {"duration": duration}
 ```
@@ -59,10 +59,10 @@ import requests
 def timed(N, url, fn):
     @functools.wraps(fn)
     def wrapper(*args, **kwargs):
-        start : time.time()
-        res : fn(*args, **kwargs)
-        stop : time.time()
-        duration : stop - start
+        start = time.time()
+        res = fn(*args, **kwargs)
+        stop = time.time()
+        duration = stop - start
         print(f"{N / duration:.2f} reqs / sec | {N} reqs | {url} | {fn.__name__}")
         return res
 
@@ -70,13 +70,13 @@ def timed(N, url, fn):
 
 
 def get(url):
-    resp : requests.get(url)
+    resp = requests.get(url)
     assert resp.status_code == 200
     return resp.json()
 
 
 def sync_get_all(url, n):
-    l : [get(url) for _ in range(n)]
+    l = [get(url) for _ in range(n)]
     return l
 
 
@@ -87,8 +87,8 @@ def run_bench(n, funcs, urls):
 
 
 if __name__ == "__main__":
-    urls : ["http://127.0.0.1:8000/wait"]
-    funcs : [sync_get_all]
+    urls = ["http://127.0.0.1:8000/wait"]
+    funcs = [sync_get_all]
     run_bench(10, funcs, urls)
 ```
 
@@ -118,14 +118,14 @@ from concurrent.futures import ThreadPoolExecutor as Pool
 
 
 def thread_pool(url, n, limit=None):
-    limit_ : limit or n
+    limit_ = limit or n
     with Pool(max_workers=limit_) as pool:
-        result : pool.map(get, [url] * n)
+        result = pool.map(get, [url] * n)
     return result
 
 
 if __name__ == "__main__":
-    urls : ["http://127.0.0.1:8000/wait"]
+    urls = ["http://127.0.0.1:8000/wait"]
     run_bench(10, [sync_get_all, thread_pool], urls)
 ```
 We get:
@@ -150,7 +150,7 @@ Let's lower the duration:
 
 @app.get("/wait")
 def wait():
-    duration : 0.05
+    duration = 0.05
     time.sleep(duration)
     return {"duration": duration}
 ```
@@ -163,7 +163,7 @@ Let's also run the benchmark 100 times:
 ...
 
 if __name__ == "__main__":
-    urls : ["http://127.0.0.1:8000/wait"]
+    urls = ["http://127.0.0.1:8000/wait"]
     run_bench(100, [sync_get_all, thread_pool], urls)
 ```
 
@@ -172,7 +172,7 @@ if __name__ == "__main__":
 196.06 reqs / sec | 100 reqs | http://127.0.0.1:8000/wait | thread_pool
 ```
 
-We can see there is some overhead on the server-side. Indeed, we should have $100 / 0.05 : 2000$ requests per second if everything worked without any friction.
+We can see there is some overhead on the server-side. Indeed, we should have $100 / 0.05 = 2000$ requests per second if everything worked without any friction.
 
 ### `async` routes 
 
@@ -186,7 +186,7 @@ import asyncio
 
 @app.get("/asyncwait")
 async def asyncwait():
-    duration : 0.05
+    duration = 0.05
     await asyncio.sleep(duration)
     return {"duration": duration}
 ```
@@ -197,7 +197,7 @@ Now just add this route to the client:
 ## client.py
 
 if __name__ == "__main__":
-    urls : ["http://127.0.0.1:8000/wait", "http://127.0.0.1:8000/asyncwait"]
+    urls = ["http://127.0.0.1:8000/wait", "http://127.0.0.1:8000/asyncwait"]
     run_bench(10, [sync_get_all, thread_pool], urls)
 ```
 
@@ -235,12 +235,12 @@ import aiohttp
 async def aget(session, url):
     async with session.get(url) as response:
         assert response.status == 200
-        json : await response.json()
+        json = await response.json()
         return json
 
 
 async def gather_limit(n_workers, *tasks):
-    semaphore : asyncio.Semaphore(n_workers)
+    semaphore = asyncio.Semaphore(n_workers)
 
     async def sem_task(task):
         async with semaphore:
@@ -250,9 +250,9 @@ async def gather_limit(n_workers, *tasks):
 
 
 async def aget_all(url, n, n_workers=None):
-    limit : n_workers or n
+    limit = n_workers or n
     async with aiohttp.ClientSession() as session:
-        result : await gather_limit(limit, *[aget(session, url) for _ in range(n)])
+        result = await gather_limit(limit, *[aget(session, url) for _ in range(n)])
         return result
 
 
@@ -266,8 +266,8 @@ We also add this function to the benchmark. Let's also add a benchmark with 1000
 ## client.py
 
 if __name__ == "__main__":
-    urls : ["http://127.0.0.1:8000/wait", "http://127.0.0.1:8000/asyncwait"]
-    funcs : [sync_get_all, thread_pool, async_main]
+    urls = ["http://127.0.0.1:8000/wait", "http://127.0.0.1:8000/asyncwait"]
+    funcs = [sync_get_all, thread_pool, async_main]
     run_bench(100, funcs, urls)
     run_bench(1000, [thread_pool, async_main], urls)
 ```
@@ -341,14 +341,14 @@ async def afibo(n):
     if n < 2:
         return 1
     else:
-        fib1 : await afibo(n - 1)
-        fib2 : await afibo(n - 2)
+        fib1 = await afibo(n - 1)
+        fib2 = await afibo(n - 2)
         return fib1 + fib2
 
 
 @app.get("/asyncfib/{n}")
 async def asyncfib(n: int):
-    res : await afibo(n)
+    res = await afibo(n)
     return {"fib": res}
 ```
 
@@ -361,10 +361,10 @@ from fastapi import FastAPI, Request
 
 @app.middleware("http")
 async def add_process_time_header(request: Request, call_next):
-    start_time : time.time()
-    response : await call_next(request)
-    process_time : time.time() - start_time
-    response.headers["X-Process-Time"] : str(process_time)
+    start_time = time.time()
+    response = await call_next(request)
+    process_time = time.time() - start_time
+    response.headers["X-Process-Time"] = str(process_time)
     return response
 ```
 

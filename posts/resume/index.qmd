@@ -1,6 +1,6 @@
 ---
 title : "The responsive markdown resume"
-author : "Horace Guy"
+
 date : 2022-02-24
 
 categories : ["HTML", "programming", "CSS", "javascript", "resume", "CV", "web"]
@@ -63,12 +63,12 @@ This is where this bit of `javascript` helped:
 
 ```js
 window.addEventListener("load", function () {
-  var elements : document.getElementsByTagName("details");
+  var elements = document.getElementsByTagName("details");
   for (let e of elements) {
     if (window.innerWidth < 500) {
-      e.open : false;
+      e.open = false;
     } else {
-      e.open : true;
+      e.open = true;
     }
   }
 })
@@ -103,7 +103,7 @@ Now it works but I still have to manually fill the preview attributes, which is 
 
 ```js, hl_lines=5-13
 window.addEventListener("load", function () {
-  var elements : document.getElementsByTagName("details");
+  var elements = document.getElementsByTagName("details");
   for (let e of elements) {
       ...
     e.children[0].setAttribute(

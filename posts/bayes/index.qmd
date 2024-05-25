@@ -1,11 +1,8 @@
 ---
 title : "An introduction to bayesian inference"
-author : "Horace Guy"
 date : 2024-04-24
-
 toc : true
-
-categories : ["probability", "bayes", "inference", "statistic"]
+categories : ["probability", "bayes", "inference", "statistics"]
 ---
 
 I first learned about bayesian statistics in a job posting for an internship. At the time, I was about 20 years old and had never heard of it. The concept was so alien to me that I first read _bayesian **interference**_. I figured it had something to do with optics, such as the Michelson interferometer that I (still) fear.
@@ -49,12 +46,12 @@ Here is the formula that we care about in inferential bayesian statistics:
 
 $$\mathrm{posterior} \propto \mathrm{prior} \times \mathrm{likelihood}$$
 
-The $\propto$ sign means proportional to, as such $a \propto b$ means $a : C \times b$ for some __constant__ $C$.
+The $\propto$ sign means proportional to, as such $a \propto b$ means $a = C \times b$ for some __constant__ $C$.
 
 In more precise terms, let $\theta$ be the unobserved random variable that we care about (weights & biases in machine learning for instance).    
 Let $p(\theta)$ denote the distribution of $\theta$. More rigorously, $p$ in this post loosely denotes either the probability of an event or the probability density (or probability mass function) of a random variable. When I write _distribution_ it often means density of the random variable.
 
-Let $D$ (for _Data_) denote our observed data, for instance $D : (\mathbf{x}, \mathbf{y}) : (x_i, y_i)_i$ for a regression or classification problem. Then the above formula can be written more precisely:
+Let $D$ (for _Data_) denote our observed data, for instance $D = (\mathbf{x}, \mathbf{y}) = (x_i, y_i)_i$ for a regression or classification problem. Then the above formula can be written more precisely:
 
 $$p(\theta | D) \propto p(\theta) \times p(D | \theta)$$
 
@@ -90,7 +87,7 @@ Note that in the case of a gaussian likelihood, for a regression, the negative l
 
 A more precise inference technique is to find the argmax of the posterior, that is the point that maximizes the posterior distribution. We call this value the __mode__ of the distribution.
 
-As with the likelihood, we use the negative logarithm. Since $\log ab : \log a + \log b$, we want to minimize the sum of the NLL and the negative log-prior.
+As with the likelihood, we use the negative logarithm. Since $\log ab = \log a + \log b$, we want to minimize the sum of the NLL and the negative log-prior.
 
 Note that the MAP with a uniform prior is the same as MLE since in this case the log-prior is a constant with respect to $\theta$.
 
@@ -161,7 +158,7 @@ from numpyro.infer import MCMC, NUTS, Predictive
 from jax import random
 
 plt.style.use('ggplot')
-%config InlineBackend.figure_format : 'svg'
+%config InlineBackend.figure_format = 'svg'
 ```
 
 </details>
@@ -172,9 +169,9 @@ Let's describe the data. Note that here 1 means heads, so that the observations 
 
 
 ```python
-tosses : np.asarray([1, 1, 1])
-nb_heads : (tosses == 1).sum()
-total_tosses : tosses.shape[0]
+tosses = np.asarray([1, 1, 1])
+nb_heads = (tosses == 1).sum()
+total_tosses = tosses.shape[0]
 ```
 
 Then, let us define the model. As discussed above, we use a Uniform prior for the bias of the coin. Then, we use a binomial likelihood. The `nb_heads` parameter use as `obs=nb_heads` in the likelihood allows us to tell the model to condition on this observation for the inference. This parameter is optional because for prediction we don't observe it.
@@ -182,7 +179,7 @@ Then, let us define the model. As discussed above, we use a Uniform prior for th
 
 ```python
 def model(N, nb_heads=None):
-    p : ny.sample("p_heads", dist.Uniform())
+    p = ny.sample("p_heads", dist.Uniform())
     ny.sample("nb_heads", dist.Binomial(N, probs=p), obs=nb_heads)
 ```
 
@@ -190,8 +187,8 @@ Let's check a prior predictive simulation, i.e. what we would predict without ha
 
 
 ```python
-prior_predictive : Predictive(model, num_samples=10_000)
-all_prior_samples : prior_predictive(random.PRNGKey(5), N=1)
+prior_predictive = Predictive(model, num_samples=10_000)
+all_prior_samples = prior_predictive(random.PRNGKey(5), N=1)
 plt.hist(all_prior_samples["p_heads"], bins=30)
 plt.title("(Beta) Prior probability distribution of the bias of the coin p(heads)")
 ```    
@@ -201,8 +198,8 @@ plt.title("(Beta) Prior probability distribution of the bias of the coin p(heads
 
 
 ```python
-prior_preds : all_prior_samples["nb_heads"]
-prior_proba_next_heads : (prior_preds == 1).mean()
+prior_preds = all_prior_samples["nb_heads"]
+prior_proba_next_heads = (prior_preds == 1).mean()
 plt.hist(prior_preds)
 plt.title(
     f"Prior predictive probability of next toss to be Heads is {prior_proba_next_heads:.3f}"
@@ -218,9 +215,9 @@ Now let's run the inference using a Markov Chain Monte Carlo (MCMC) algorithm to
 
 
 ```python
-mcmc : MCMC(NUTS(model), num_warmup=1000, num_samples=10000)
+mcmc = MCMC(NUTS(model), num_warmup=1000, num_samples=10000)
 mcmc.run(random.PRNGKey(0), N=total_tosses, nb_heads=nb_heads)
-posterior_p_heads_samples : mcmc.get_samples()["p_heads"]
+posterior_p_heads_samples = mcmc.get_samples()["p_heads"]
 plt.hist(posterior_p_heads_samples, bins=30)
 plt.axvline(posterior_p_heads_samples.mean(), linestyle="--", color="red", label="mean")
 plt.legend()
@@ -248,9 +245,9 @@ We obtain predictions directly with the `Predictive` method. Note that since we 
 
 
 ```python
-predictive : Predictive(model, mcmc.get_samples())
-preds : predictive(random.PRNGKey(10), N=1)["nb_heads"]
-proba_next_heads : (preds == 1).mean()
+predictive = Predictive(model, mcmc.get_samples())
+preds = predictive(random.PRNGKey(10), N=1)["nb_heads"]
+proba_next_heads = (preds == 1).mean()
 plt.hist(preds)
 plt.title(
     f"Posterior probability of next toss to lead to heads is approx. {proba_next_heads:.3f}"
@@ -266,7 +263,7 @@ Let's modify the model with a $\mathrm{Beta}$ prior:
 
 ```python
 def model(N, nb_heads=None):
-    p : ny.sample("p_heads", dist.Beta(3, 3))
+    p = ny.sample("p_heads", dist.Beta(3, 3))
     ny.sample("nb_heads", dist.Binomial(N, probs=p), obs=nb_heads)
 ```
 
@@ -284,11 +281,11 @@ Same as before, since we only simulate one toss, the probability of the next tos
 ## Betting on the outcome
 
 As discovered by Bruno De Finetti, our belief about the world should translate into betting odds. In other words, what are the __fair__ odds that you should accept for a given outcome ? 
-The fair decimal odds for a given event of probability $p$ can be obtained by taking $odds : {1 \over p}$.
+The fair decimal odds for a given event of probability $p$ can be obtained by taking $odds = {1 \over p}$.
 
 ### Betting on the next coin toss
 
-In the case of a uniform prior, the probability of the next coin toss leading to Heads is $0.8$, hence odds of ${5 \over 4} : 1.25$.
+In the case of a uniform prior, the probability of the next coin toss leading to Heads is $0.8$, hence odds of ${5 \over 4} = 1.25$.
 
 However, with a $\mathrm{Beta}$ prior, we have a probability of $0.68$, hence odds of $1.47$. Way higher, for the same set of observations !
 

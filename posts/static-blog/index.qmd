@@ -1,6 +1,6 @@
 ---
 title : "Setting up your own blog"
-author : "Horace Guy"
+
 date : 2021-09-07
 
 categories : ["blog", "CDN", "static", "serverless", "independent", "meta"]

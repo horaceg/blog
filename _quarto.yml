@@ -1,23 +1,26 @@
-toc: true
 project:
   type: website
 
 website:
-  title: "Horace Guy's blog"
+  title: Regression toward the meaning
   site-url: https://blog.horaceg.xyz
   description: "Horace Guy's blog about random things"
-  sidebar:
-    contents: auto
+  # sidebar:
+  #   contents: auto
   navbar:
-    right:
-      - text: Posts
+    background: "#eee"
+    title: false
+    left:
+      - text: Home
         href: /
-      - about.qmd
+      - icon: rss
+        href: index.xml
+    right:
+      - text: About
+        href: /about.html
       - text: CV
         href: https://resume.horaceg.xyz
         target: _blank
-      - icon: rss
-        href: index.xml
       - icon: github
         href: https://github.com/horaceg
       - icon: twitter
@@ -27,13 +30,18 @@ website:
       # - icon: stackoverflow
       #   href: https://stackoverflow.com/9162021
 
+  page-footer:
+    center:
+      - href: https://blog.horaceg.xyz
+        text: blog.horaceg.xyz
+
   comments:
     giscus: 
       repo: horaceg/blog
   
 format:
   html:
-    theme: sketchy
+    theme: litera
     css: styles.css
     anchor-sections: true
     highlight-style: github

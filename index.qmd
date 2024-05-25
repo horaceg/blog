@@ -1,13 +1,24 @@
 ---
-title: "Regression to the meaning"
+title: Regression toward the meaning
+subtitle: A blog by Horace Guy
 listing:
   contents: posts
   sort: "date desc"
-  type: default
+  type: grid
+  grid-columns: 3
+  image-height: 250px
+  page-size: 100
   categories: true
   sort-ui: false
   filter-ui: false
   feed: true
+  fields:
+    - title
+    - date
+    - reading-time
+    - description
+    - categories
+    - image
 page-layout: full
 title-block-banner: true
 comments: false

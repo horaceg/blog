@@ -1,5 +1,5 @@
 ---
-title: "About"
+title: "Horace Guy"
 image: me_kurdish.jpeg
 about:
   template: jolla
@@ -17,12 +17,11 @@ about:
 comments: false
 ---
 
-
 Welcome to my blog ! I am a Data Scientist living in Paris. 
 
 I am interested in programming, software engineering, statistics and machine learning.
 
-I write [blog posts](/posts) in here `:)`.
+I write [blog posts](/) in here `:)`.
 
 Here is a selection of posts:
 
