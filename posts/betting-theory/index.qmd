@@ -5,7 +5,7 @@ date : 2021-09-06
 
 toc : true
 
-categories : ["math", "probability", "bets", "theory", "bookmaking"]
+categories : ["math", "probability", "betting", "bookmaking"]
 ---
 
 ## Introduction
