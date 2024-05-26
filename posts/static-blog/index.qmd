@@ -42,6 +42,8 @@ With this setup, I had everything I was looking for:
 
 So i just went for it on a whim. It took me three hours to write my first post, set the dev environment up and deploying it to [Cloudflare Pages](https://developers.cloudflare.com/pages/). I even have web anayltics for free, _without additional javascript_[^ga-js]: no cookies, yay!
 
+![Some posts in my blog](blog-screenshot.png)
+
 Overall I am very happy with the experience so far. The website could be leaner and faster, but I believe it is fast enough. For now. And it's free (as in beer).
 
 
