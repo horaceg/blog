@@ -3,7 +3,7 @@ title : "Setting up your own blog"
 
 date : 2021-09-07
 
-categories : ["blog", "CDN", "static", "serverless", "independent", "meta"]
+categories : ["blog", "CDN", "static", "serverless", "meta"]
 ---
 
 I've been wanting to publish online for some time. I was very young during the Wordpress wave, so I was never really drawn into it.

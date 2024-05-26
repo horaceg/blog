@@ -8,6 +8,8 @@ toc : true
 categories : ["math", "probability", "betting", "bookmaking"]
 ---
 
+![(sports) Betting is similar to gambling](chips_poker.avif)
+
 ## Introduction
 
 Have you ever placed a bet ? Wondered what the odds actually mean ?
