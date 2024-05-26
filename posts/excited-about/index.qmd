@@ -11,6 +11,7 @@ As a data scientist by day, and tinkerer by night, I am often browsing Hacker Ne
 ## Python
 
 On the scientific computing side, there is one behemoth: Python. However, it still isn't on par with R for statistics. `Pandas` is often criticized and compared to the supposedly more user-friendly `dplyr`. The GIL prevents true multithreading. There is a fragmented community that can have a hard time understanding each other with the introduction of:
+
 - Static types
 - [Asynchronous IO](https://en.wikipedia.org/wiki/Asynchronous_I/O) (`asyncio`)
 - Scientific python: 

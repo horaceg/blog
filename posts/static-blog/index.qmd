@@ -28,9 +28,10 @@ _In fine_, I managed to publish my content to the world, this time using [Netlif
 
 Two years later: here we go again. This time, I have a few years of experience under my belt, I am using Linux as my daily-driver (and MacOS at work). I'm much more comfortable using a terminal and software developemnt in general. 
 
-A friend of mine had been excited about [Rust](https://www.rust-lang.org/) for a while, and I knew that there were some SSGs written in it. So, I browsed [Zola](https://www.getzola.org/) themes hoping to find a decent-looking website. Since there aren't that many themes for Zola, I quickly found a good one[^DeepThought]. 
+A friend of mine had been excited about [Rust](https://www.rust-lang.org/) for a while, and I knew that there were some SSGs written in it. So, I browsed [Zola](https://www.getzola.org/) themes hoping to find a decent-looking website. Since there aren't that many themes for Zola, I quickly found a good one [^DeepThought]. 
 
 With this setup, I had everything I was looking for: 
+
 - A single binary: no dependencies
 - Blazingly fast
 - [$\KaTeX$](https://katex.org/) support
@@ -44,12 +45,12 @@ So i just went for it on a whim. It took me three hours to write my first post, 
 Overall I am very happy with the experience so far. The website could be leaner and faster, but I believe it is fast enough. For now. And it's free (as in beer).
 
 
-[^jekyll-author] By [Tom Preston-Werner](https://en.wikipedia.org/wiki/Tom_Preston-Werner), founder and former CEO of Github.
+[^jekyll-author]: By [Tom Preston-Werner](https://en.wikipedia.org/wiki/Tom_Preston-Werner), founder and former CEO of Github.
 
-[^jekyll-nix] Later on, I [learned](https://youtu.be/USDbjmxEZ_I?t=1544) that I wasn't the only one experiencing this fatigue.
+[^jekyll-nix]: Later on, I [learned](https://youtu.be/USDbjmxEZ_I?t=1544) that I wasn't the only one experiencing this fatigue.
 
-[^no-pun] No pun intended since Hugo is written in Go.
+[^no-pun]: No pun intended since Hugo is written in Go.
 
-[^DeepThought] [DeepThought](https://www.getzola.org/themes/deepthought/)
+[^DeepThought]: [DeepThought](https://www.getzola.org/themes/deepthought/)
 
-[^ga-js] Actually this theme ships with the Google Analytics script, since there is no tree-shaking nor dead-code elimination (yet)
+[^ga-js]: Actually this theme ships with the Google Analytics script, since there is no tree-shaking nor dead-code elimination (yet)

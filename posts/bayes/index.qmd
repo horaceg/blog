@@ -65,6 +65,7 @@ The __posterior distribution__ $p(\theta | D)$ is what we ultimately care about.
 ### What to make of this formula ?
 
 There are mainly 3 types of inference methods that we can leverage based on the above formula:
+
 - __Maximum likelihood estimation (MLE)__: we seek one point estimate of $\theta$ based on observations and the likelihood
 - __Maximum a posteriori (MAP)__: we seek one point estimate of $\theta$ based on observations and prior knowledge - likelihood and prior
 - __Full posterior inference__: we seek representative samples from the posterior distribution of $\theta$ based on the inference formula.
@@ -129,7 +130,7 @@ A popular algorithm is Markov Chain Monte Carlo (MCMC), where we sample from the
 
 We can also use Variational Inference, where we approximate the posterior density with a known parameterized family of distributions such as Gaussians that we can optimize with e.g. stochastic gradient descent; in this case, it becomes stochastic variational inference (SVI). Note that the similarity between posterior and the variational distribution is often evaluated with the Kullback-Leibler divergence.
 
-If you need something even more scalable, paying the price of quality, you can use the Laplace approximation[^laplace-deepmind].
+If you need something even more scalable, paying the price of quality, you can use the Laplace approximation [^laplace-deepmind].
 
 The detailed machinery of inference algorithms are out of scope for this blog post, but the workhorse of modern bayesian inference. Indeed, for many problems the inference using e.g. MCMC is very computationally intensive, so scalable techniques are highly desired.
 
@@ -307,4 +308,4 @@ Joke aside, I hope that the mysteries of bayesian inference are now a bit less o
 
 _Many thanks to Théo Stoskopf, Théo Dumont, Haixuan Xavier Tao, Ai-Jun Tai for their precious feedback on early drafts of this post_
 
-[^laplace-deepmind] See e.g. [https://github.com/aleximmer/Laplace](https://github.com/aleximmer/Laplace)
+[^laplace-deepmind]: See e.g. [https://github.com/aleximmer/Laplace](https://github.com/aleximmer/Laplace)

@@ -65,7 +65,8 @@ Kaggle required a notebook submission. Collaboration on notebook is particularly
 ## The submission
 
 _In fine_, we implemented bayesian Covid-19 models that perform:
-- An estimation of the effective reproduction number Rt as a function of mobility data and reported deaths
+
+- An estimation of the effective reproduction number $R_t$ as a function of mobility data and reported deaths
 - An estimation of mobility as a function of non-pharmaceutical interventions
 
 See the [kaggle submission](https://www.kaggle.com/achyrogue/impact-of-interventions-through-mobility-data) for the full analysis.

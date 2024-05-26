@@ -404,6 +404,7 @@ It's not that bad for $2^{30}$ overhead. But we see here a limitation of threads
 ## Gunicorn and multiprocessing
 
 So far we've used FastAPI with Uvicorn. The latter can be [run with Gunicorn](https://www.uvicorn.org/#running-with-gunicorn). Gunicorn forks a base process into `n` worker processes, and each worker is managed by Uvicorn (with the asynchronous uvloop). Which means:
+
 - Each worker is concurrent
 - The worker pool implements parallelism
 

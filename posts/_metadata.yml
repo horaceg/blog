@@ -19,3 +19,7 @@ license: "CC BY"
 toc: true
 toc-title: Table of contents
 toc-location: left
+
+format:
+  html:
+    html-math-method: katex
