@@ -6,6 +6,8 @@ date : 2021-09-08
 categories : ["web", "front-end", "back-end", "future", "scientific computing", "machine learning", "programming"]
 ---
 
+![Tinkerer imagining great things while looking at a computer screen. Made with ChatGPT](tinkerer.webp)
+
 As a data scientist by day, and tinkerer by night, I am often browsing Hacker News and the like in order to be up-to-date with the latest cool technologies. 
 
 ## Python

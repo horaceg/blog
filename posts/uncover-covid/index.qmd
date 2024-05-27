@@ -6,6 +6,8 @@ date : 2021-09-09
 categories : ["machine learning", "probability", "bayes", "epidemiology", "kaggle", "probabilistic programming"]
 ---
 
+![A diagram of the overall workflow](diagram_bayes_epi.png)
+
 In March 2020, lockdown measures were implemented all over the world due to the spread of Covid-19. I was at home, a bit bored and I was looking for something to do.
 
 __TL;DR__: 
