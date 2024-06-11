@@ -26,6 +26,7 @@ However, if you don't know if the coin is biased or not, then your belief that t
 Born c. 1701, Thomas Bayes was a pioneer of statistics, and a minister of the Church. Coincidentally, these days some people are so [deep into the Bayesian doctrine](https://www.inference.vc/the-secular-bayesian-using-belief-distributions-without-really-believing/) that we can consider them as being part of the _Bayesian church_.
 
 In 1763 was published _An Essay towards solving a Problem in the Doctrine of Chances_, 2 years after Bayes' death. In it, he states in the beginning the Bayes' theorem as we know it. [On wikipedia](https://en.wikipedia.org/wiki/An_Essay_towards_solving_a_Problem_in_the_Doctrine_of_Chances#Outline) we can read:
+
 > it does not appear that Bayes emphasized or focused on this finding. Rather, he focused on the finding the solution to a much broader inferential problem: 
 > 
 > "Given the number of times in which an unknown event has happened and failed [... Find] the chance that the probability of its happening in a single trial lies somewhere between any two degrees of probability that can be named."
@@ -293,6 +294,7 @@ However, with a $\mathrm{Beta}$ prior, we have a probability of $0.68$, hence od
 So, which is the right odds ? __Neither__. Because there are many scenarios, that is many possible biases, that could lead to the sequence _Heads - Heads - Heads_ as the first three tosses. As Michael Betancourt would say, _embracing uncertainty with probability_ is what makes us bayesian. Hence, not focusing on the mean of the posterior distribution of `p_heads` but rather checking the whole extent of the density. This gives us plenty of information, from which we can draw credible intervals if we want.
 
 As Georges Box famously said:
+
 > All models are wrong, but some are useful.
 
 We could even argue that the _true_ probability of an event doesn't exist, it is merely a way to measure our incomplete information about the world in a specific context. In the real world, there is no probability, only events that happen or don't happen. But what about quantum physics ? Well, we don't deal with such a small scale here so I argue it's irrelevant. We got a bit sidetracked, and to be honest this stuff is over my head.
