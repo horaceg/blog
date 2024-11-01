@@ -3,3 +3,4 @@ _site/
 
 /.quarto/
 .DS_Store
+_freeze/
