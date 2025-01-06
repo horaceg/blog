@@ -1,0 +1,26 @@
+---
+title : "An interactive introduction to probabilistic programming"
+date : 2025-01-06
+categories : ["machine learning", "programming", "probabilistic", "bayesian", "inference"]
+---
+<div class='container'>
+<iframe id="iframe" scrolling="no" src="https://intro-ppl.pages.dev/"></iframe>
+</div>
+
+<style>
+    .container {
+        display: flex;
+        width: 100%; 
+        height: 100%; 
+        flex-direction: column; 
+        overflow: auto;
+    }
+    iframe {
+        flex-grow: 1; 
+        border: none; 
+        margin: 0; 
+        padding: 0; 
+        display: block;
+        height: 600vh; 
+    }
+</style>
