@@ -3,6 +3,9 @@ title : "An interactive introduction to probabilistic programming"
 date : 2025-01-06
 categories : ["machine learning", "programming", "probabilistic", "bayesian", "inference"]
 ---
+
+![Prior, posterior and likelihood](badnormal.png)
+
 <div class='container'>
 <iframe id="iframe" scrolling="no" src="https://intro-ppl.pages.dev/"></iframe>
 </div>
