@@ -51,6 +51,7 @@ When there is no possible confusion, we write $G_A \cong G^o_A$ and $F_A \cong F
 <!-- [Todo: Quelle est la relation de $\pi$ avec $\hat{p}$ ? qqc à propos de la continuité absolue de $\pi$ par rapport à $p$ et la dérivée de Radon-Nikodym? Voir aussi] -->
 <!-- [Todo [Girsanov](https://en.wikipedia.org/wiki/Girsanov_theorem)] -->
 
+In this section, and in this section only, we assume that $\pi$ is additive (see definition below).
 
 ### Coherence
 
@@ -58,7 +59,7 @@ We say that the odds are _coherent_ for a given bookie, or that a _book_ is cohe
 
 * $\pi_{A \cup B} = \pi_A + \pi_B$ when $A \cap B = \emptyset$
 
-It is another way to say that $\pi$ is additive.
+It is another way to say that $\pi$ is __additive__.
 
 Then we can deduce other rules:
 
@@ -70,10 +71,10 @@ This last equality shows that the **booksum** is universal. This also allows us 
 
 * $\pi_{\emptyset} = 0$
 
-Which means that $\pi$ is a measure, and which is finite. 
+Which means that $\pi$ is a measure, which is finite. 
 
 <!-- 
-### Additional assumptions
+#### Additional assumptions
 
 Assume that $\pi$ is usually absolutely continuous with respect to $p$, that is every event with zero probability doesn't have any odds (or odds of $+\infty$, theoretically). 
 
@@ -223,11 +224,11 @@ where $\epsilon_A = \hat{\pi}_{\Omega} - 1 > 0$. This is the bookie's margin: yo
 
 Note that if the bookie is not smart, or that you are dealing with several bookies at the same time, treating them as one bookie offering the highest odds for any event, you might see an opportunity where $\hat{F}_{\Omega} > 0$, that is $\epsilon_A < 0$. This quantity becomes you sure net gain in this arbitrage case.
 
-## Incoherent odds
+See the [appendix](#appendix) for the construction of surebets with the help of reversing (negative) bets.
 
-In the case of incoherent odds, a bettor can build a _dutch book_ against the bookie, that is a set of bets that constitutes a surebet. That is, provided the bookie offers odds on all relevant events, which they don't in practice to avoid this situation.
+## Dutch book
 
-See [Appendix](#appendix) for the construction of surebets with the help of reversing (negative) bets.
+Provided that we can back or lay any bet offered to us, that is, for a given odds, play the role of the punter _or_ the role of the bookie. In the case of incoherent odds, a bettor can build a _dutch book_ against the bookie, that is a set of bets that constitutes a surebet.
 
 
 <!-- 
@@ -296,7 +297,7 @@ An easy technique to get a probability from consistent (and unfair) odds is to n
 
 This assumes that the $\forall A, \epsilon_A = \hat{\pi}_{\Omega} - 1$: the bookies' margin is uniform on all outcomes, which is probably false in real situations. However, this provides a first guess that is easy to compute.
 
-If we assume that $\pi$ is coherent, it is immediate that we have $\hat{p}_{\Omega} = 1$ and thus $\hat{p}$ is a probability measure.
+If we assume that $\pi$ is additive, it is immediate that we have $\hat{p}_{\Omega} = 1$ and thus $\hat{p}$ is a probability measure.
 
 ### Shin's model
 
@@ -308,17 +309,32 @@ See Shin 1991, Strumbelj 2014 for further analysis.
 
 [Todo] -->
 
-## Multiple odds
+## Handling multiple odds
 
-### Single event
+If we have access to multiple odds at a given time, we have virtually access to all the odds in between. Why would you bet in-between though, since you should take the highest odds?
 
-Observe that for any given event, $\\{F^{\pi}\ | \pi \ge 0 \\}$ is a convex set:
+Also, this trick might be useful to _reduce_ a position to one equivalent bet, or _expand_ a single bet into multiple ones. This might also be useful to test a risk assessment system (with e.g. a property-based testing framework).
 
-$\alpha F^{\pi_1} + (1 - \alpha) F^{\pi_2} = F^{\alpha \pi_1 + (1 - \alpha)\pi_2}$.
+A more realistic situation arises when we place multiple bets on the same event at different times, while odds have been varying (in-play betting for example). If you did spot value at time $t$ and the odds move in your favour, then you should still bet at time $t + \delta t$. In order to simplify you position, you can virtuallly reduce your two bets to one equivalent bet at odds in-between.
+
+### Single event - Convexity
+
+Observe that for any given event, $\{F_A^{\pi}\ | \pi \ge 0 \}$ is a convex set:
+
+For $\alpha \in [0, 1]$, we have:
+
+$\alpha F_A^{\pi_1} + (1 - \alpha) F_A^{\pi_2} = F_A^{\alpha \pi_1 + (1 - \alpha)\pi_2}$.
 
 This gives us a useful formula to combine gains, betting on mutiple odds at once:
 
-$x F^{\pi_1}_A + y F^{\pi_2} = (x + y) (\frac{x}{x + y}F^{\pi_1} + \frac{y}{x+y}F^{\pi_2}) = (x + y) F^{\alpha \pi_1 + (1 - \alpha) \pi_2}$
+$$
+\begin{equation*}
+\begin{split}
+x F^{\pi_1}_A + y F_A^{\pi_2} & = (x + y) (\frac{x}{x + y}F_A^{\pi_1} + \frac{y}{x+y}F_A^{\pi_2}) \\ 
+& = (x + y) F_A^{\alpha \pi_1 + (1 - \alpha) \pi_2}
+\end{split}
+\end{equation*}
+$$
 
 where $\alpha = \frac{x}{x+y}$.
 
@@ -326,11 +342,47 @@ In practice, you can also use $G$ with the odds:
 
 $x G^{o_1} + y G^{o_2} = (x + y) G^{\alpha o_1 + (1 - \alpha) o_2}$
 
-If we have access to multiple odds at a given time, we have virtually access to all the odds in between. Why would you bet in-between though, since you should take the highest odds?
+### Single event and its complimentary
 
-Also, this trick might be useful to _reduce_ a position to one equivalent bet, or _expand_ a single bet into multiple ones. This might also be useful to test a risk assessment system (with e.g. a property-based testing framework).
+For $\alpha \in [0, 1]$, we have:
 
-A more realistic situation arises when we place multiple bets on the same event at different times, while odds have been varying (in-play betting for example). If you did spot value at time $t$ and the odds move in your favour, then you should still bet at time $t + \delta t$. In order to simplify you position, you can virtuallly reduce your two bets to one equivalent bet at odds in-between.
+$$
+\begin{equation*}
+\begin{split}
+(1 - \alpha) F_A^{\pi} + \alpha F_{\overline{A}}^{\pi} & = (1 - 2 \alpha) F_A^{\pi} - \alpha \epsilon_A \\
+& = (2 \alpha - 1) F_{\overline{A}}^{\pi} - (1 - \alpha) \epsilon_A
+\end{split}
+\end{equation*}
+$$
+
+where $\epsilon_A = \pi_A + \pi_{\overline{A}} - 1$
+
+In the _smart bookie_ setting, $\epsilon_A > 0$.
+
+for arbitraty amounts $x, y \geq 0$, we have:
+
+$$
+\begin{equation*}
+\begin{split}
+x F_A^{\pi} + y F_{\overline{A}}^{\pi} & = (x - y)F_A^{\pi} - y \epsilon_A \\
+& = (y - x)F_{\overline{A}}^{\pi} - x \epsilon_A 
+\end{split}
+\end{equation*}
+$$
+
+### Combining both
+
+We arrive thus at the combining formula:
+
+$$
+\begin{equation*}
+\begin{split}
+x F_A^{\pi_1} + y F_A^{\pi_2} + z F_{\overline{A}}^{\pi_3} & = (x + y - z) F_A^{\alpha \pi_1 + (1 - \alpha) \pi_2} - z [\alpha \pi_1 + (1 - \alpha) \pi_2 + \pi_3 - 1]
+\end{split}
+\end{equation*}
+$$
+
+where $\alpha = \frac{x}{x + y}$
 
 <!-- ## Odds varying through time
 
