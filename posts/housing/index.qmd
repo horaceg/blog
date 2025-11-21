@@ -9,7 +9,7 @@ categories : ["real estate", "investment", "javascript", "programming"]
 
 As a young-ish professional, I've been wondering whether I should buy my primary residence or keep renting. With this thought, I've been driven to answer this question in a rational manner.
 
-You can see the results of this investigation on this website: [linemo](https://linemo.horaceg.dev/).
+You can see the results of this investigation on this website: [linemo](https://linemo.horaceg.xyz/).
 
 ## Loan interest rates
 
