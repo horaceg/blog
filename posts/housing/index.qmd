@@ -1,0 +1,72 @@
+---
+title : "A real estate investment calculator"
+date : 2025-11-21
+toc : true
+categories : ["real estate", "investment", "javascript", "programming"]
+---
+
+![Monthly Payments: loan & interest](monthly_payments.png)
+
+As a young-ish professional, I've been wondering whether I should buy my primary residence or keep renting. With this thought, I've been driven to answer this question in a rational manner.
+
+You can see the results of this investigation on this website: [linemo](https://linemo.horaceg.dev/).
+
+## Loan interest rates
+
+It all started when I wanted to know how much I would pay in interest for a loan. Because let's face it, the interest rate is super _opaque_ about how much interest I would pay over the life of the loan. One might, naively, think that a 4% interest rate means that I would pay 4% of the principal in interest over the life of the loan (In a loan, the principal is the original amount of money you borrow, not including any interest or fees).
+
+
+However, this is not the case. The interest rate is applied to the remaining balance of the loan, every month. This means that the interest you pay decreases over time ; but the amount of interest you pay over the life of the loan is way higher than 4% of the principal.
+
+So I've built a simple [loan simulator](https://linemo.horaceg.xyz/loan) to answer this question.
+
+### Case study : contracting a loan
+
+
+Let's assume that I pay every month 1,500€ over 20 years. The amount of the loan is 266,000€. 
+
+According to the current interest rates around 3.2%, I would pay 94 000€ in interest over the life of the loan ; or around 35% of the principal. Note that this is way more than the 4% of the principal that one may naively think.
+
+[Here is the case study](https://linemo.horaceg.xyz/loan?mode=mp&monthly=1500&loan=165&duration=20&rate=3.2).
+
+Now that we understand how a loan works, let's move on to the next question: should I buy a home, to live in, or rent it ?
+
+## Buy or rent?
+
+
+You generally have 2 options:
+
+- Buy a home (to live in)
+- Rent a home
+
+The question is: which option is better for you in the short, medium, and long run ? 
+
+Surprisingly, the answer is not obvious. At a first glance, it seems that buying a home is always better: instead of **throwing money away** by renting, you are **investing** in your own home. However, this is not always the case, mostly because of the costs associated with buying a home: **agency fees** and **closing costs**.
+
+Agency fees are typically "paid by the seller"  to the agency that helps them sell their home. Closing costs are the costs associated with the purchase of a home, such as notary fees, registration fees, etc. When summing up both costs, it is possible that the total cost of buying a home is higher than the total cost of renting a home. 
+This means that for every transaction, you are **losing money** by buying a home. Now, it _could_ be worth it _if you stay long enough_. How long ? This is the question that the [buy or rent](https://linemo.horaceg.xyz/buy-vs-rent) calculator answers.
+
+### Case study : renting or buying an apartment in France - fall 2025
+
+[Here is a realistic scenario](https://linemo.horaceg.xyz/buy-vs-rent?mode=mp&monthly=1500&loan=309&duration=25&rate=3.2&rent=1200&rentInc=1&savingsRoi=6&tax=30&down=15&appreciation=1&closing=7.7&agency=5&extras=50&propertyTax=1000&maintenance=150).
+
+As you can see, the conclusion is: _Wait 15.2 years for buying to overtake renting_. So in this scenario, buying is better than renting ONLY if you stay in the apartment for more than 15.2 years.
+
+Of course, there are many assumptions here that may not be true, especially since they are based on future values. For instance: the rent increase, the evolution of real estate prices, the Return on investment (ROI) of the savings, the tax rate, etc.
+
+However, this calculator let's you play with the assumptions to see how the result changes.
+
+## The math
+
+[Here is the math behind the calculator](https://linemo.horaceg.xyz/how-it-works). In a nutshell, thanks to arithmetico-geometric series, we can compute all the interest payments, and the total amount of interest paid over the life of the loan.
+
+
+## Conclusion
+
+All in all, this calculator is a tool to help you make decisions. It is not perfect, but it can be a useful tool to help:
+
+- Understand how a loan works, and how many interest you will pay
+- Understand the costs associated with buying / renting a home
+- Understand the impact of the assumptions on the result
+- Make a decision based on the results
+
