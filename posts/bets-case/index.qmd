@@ -1,0 +1,633 @@
+---
+title: "Beating the Bookmakers? Modeling Value and Arbitrage in english football league"
+subtitle: Surebets, Online Learning, and Kelly Staking Strategies on Real Betting Markets
+date: 2025-11-30
+toc: true
+categories: ["probability", "inference", "statistics", 'modelling', 'betting', 'bookmaking', 'machine learning']
+code-fold: true
+code-tools: true
+---
+
+Is it possible to _beat the bookmakers_ at their own game?
+
+N.B.: Show or hide all code with the _code_ button next to the title above ↑.
+
+## Introduction
+
+This dataset comes from [football-data.co.uk](https://football-data.co.uk), and contains the closing odds for the __premier league__ (soccer / football), season 2024-2025.
+
+There are 3 possible outcomes for each game : home wins (H), away wins (A), and draw (D). 
+
+In the first part, we'll take a look at what placing a bet means mathematically.
+
+Then, we'll study market structure by looking for __arbitrage__ opportunities, also known as __surebets__.
+
+Finally, we build a predictive model using JAX and online learning. We find mispriced odds, also known as __value bets__. 
+
+---
+
+Here is a glimpse of the dataset:
+
+```{python}
+# %config InlineBackend.figure_format = 'retina'
+
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from pathlib import Path
+
+plt.style.use("ggplot")
+
+datapath = Path("./")
+df = pd.read_parquet(datapath / "premier_league_odds_processed.parquet")
+assert df['Date'].is_monotonic_increasing
+
+df
+```
+
+## Betting on an outcome
+
+Say we want to bet on an event $E$. In our case, $E$ could be either:
+
+- Home wins 
+- Away wins
+- Draw
+
+The __stake__ is how much of our money (or bankroll) we want to risk.
+
+The __decimal odds__ is the coefficient that tells us how much is the return for a unit (1) stake. 
+
+If the odds are at 2 for a given outcome, then the return with stake 1 is:
+
+- 2 if we win
+- 0 if we lose
+
+Note that we need to subtract the stake to have the net gain. With the same example:
+
+- 1 if we win
+- -1 if we lose
+
+In general, the net gain for a given unit bet, that is with stake 1, is $G_E := o_E \mathbf{1}_E - 1$
+
+where:
+
+- $\mathbf{1}_E$ is 1 when outcome $E$ happens ; 0 if it doesn't.
+- $o_E > 1$ is the (decimal) odds for outcome $E$.
+
+In other words, the unit gain for event $E$ is:
+
+- $o_E - 1 > 0$ if $E$ happens.
+- $-1$ if $E$ doesn't happen.
+
+When we want to change the stake to something different than 1, just multiply $G_E$ by the stake $s$: 
+
+$$sG_E = s(o_E \mathbf{1}_E - 1)$$
+
+## Arbitrages or surebets
+
+An arbitrage (or _arb_) is a situation where the bettor can earn money, whatever the outcome. It works by eliminating the randomness, betting on _all 3 outcomes_ with different stakes. How can we do that ?
+
+We stake our bets with the inverse odds. Denote $\pi_E := \frac{1}{o_E}$. Then we use this inverse odds to stake the bet:
+
+$$\pi_E G_E = \mathbf{1}_E - \pi_E$$
+
+Where the above holds since $\pi_E o_E = 1$.
+
+Now let's see when this quantity is applied to all 3 outcomes, that we abbreviate with $H$ for home wins, $A$ for away wins, and $D$ for draw. We sum the gains:
+
+$$
+\mathrm{ArbGain} := \pi_H G_H + \pi_A G_A + \pi_D G_D \\ 
+= \mathbf{1}_H - \pi_H + \mathbf{1}_A - \pi_A + \mathbf{1}_D - \pi_D \\
+= (\mathbf{1}_H + \mathbf{1}_A + \mathbf{1}_D) - (\pi_H + \pi_A + \pi_D)
+$$
+
+
+Now, note that $\mathbf{1}_H + \mathbf{1}_A + \mathbf{1}_D = 1$, since exactly one and only one of them equals $1$.
+
+Thus, the unit arb gain is:
+
+$$\mathrm{ArbGain} = 1 - (\pi_H + \pi_A + \pi_D)$$
+
+
+As we can see, there is no randomness involved anymore. And we make a profit when _the sum of the inverse odds across outcomes is lower than 1_.
+
+We can then scale the gain by multiplying each stake by the grand total amount involved. Usually, arbs give us a small proportion of the total stake ; which means to have meaningful gain, you need to stake a lot. 
+
+Let's check for arb opportunities. The dataset we have contains the maximum odds in the market for each game and outcome. If we had to bet in practice, we would have to choose the right bookmaker for each game and outcome. We start by computing the inverse odds:
+
+```{python}
+max_inv_odds = (
+    df[["MaxH", "MaxA", "MaxD"]]
+    .rename(dict(MaxH="H", MaxA="A", MaxD="D"), axis=1)
+    .pow(-1)
+)
+max_inv_odds
+```
+
+And then, we compute the profit for each game, filtering when it's positive, and display the gains as a proportion of the total stake involved in the bet.
+
+```{python}
+profit = 1 - max_inv_odds.sum(axis=1)
+arbs = profit.loc[lambda s: s.gt(0.005)]
+
+
+(
+    df.loc[arbs.index, ["Date", "Time", "HomeTeam", "AwayTeam"]]
+    .join(arbs.to_frame("unit gain"))
+    .style.format({"unit gain": "{:.2%}"})
+    .background_gradient()
+)
+```
+
+
+In practice, a 0.5% (or less) arb is often __not executable__ due to limits, delays, and fees; that's why we filter them out.
+
+The 12.9% one is likely a "fat finger", that is, an error in data entry. We can see here that most of the arb opportunities are less than 2%. In other words, hard to execute because to have a 2$ profit, you need to risk 100. 
+
+It is risk-free in theory, but in a live situation, the execution with different bookies and real-time odds movement create risk.
+
+## Value betting
+
+Another strategy that we can use to try to win while betting, is called value bets. 
+
+While surebets (arbitrages) are opportunities to eliminate randomness, the profit is usually very small (lower than 1%). 
+
+A more profitable, but riskier, strategy is value betting: we build a model of the process, here football, and predict the probabilities of each outcome. When the predicted probabilities are higher than inverse odds, for one outcome, we bet on it.
+
+This is another way to say that when (decimal) odds are _too high_ (according to our model), we should bet.
+
+Let's use a bradley-terry inspired model, a model similar to Elo ratings. The concept is to estimate a hidden parameter, the __team strength__, that allows us to rank teams _and_ predict the probabilities of each outcome.
+
+To make the computation faster, we're going to keep a dict of team strengths and update it after each game. To do this, we use JAX and gradient descent.
+
+Let's take a look at the result column:
+
+```{python}
+df["FTR"]
+```
+
+We one-hot encode the full-time result `FTR`, using `pd.get_dummies`:
+
+```{python}
+dummy_result = pd.get_dummies(df["FTR"])[["H", "A", "D"]].astype(int)
+dummy_result
+```
+### Bradley-terry inspired model
+
+#### Parameters
+
+Per team:
+
+* $s_i \in \mathbb{R}$: team strength
+
+Global:
+
+* $\phi \in \mathbb{R}$: home advantage
+* $\delta \in \mathbb{R}$: baseline draw tendency
+* $\gamma \ge 0$: how strongly “even games → draws” is enforced
+
+We keep a dict of team → $s_i$ plus scalars $\phi$,$\delta$,$\gamma$.
+
+#### Model
+
+
+For a match with home team (h), away team (a):
+
+Strength difference:
+   $$
+   \Delta = s_h - s_a
+   $$
+
+Define logits for the three outcomes $H$, $D$, $A$:
+
+* Home win:
+  $$
+  z_H = \phi + \Delta
+  $$
+* Away win:
+  $$
+  z_A = -\phi - \Delta
+  $$
+* Draw (depends on how close strengths are):
+  $$
+  z_D = \delta - \gamma \Delta^2
+  $$
+
+We can use the following intuition:
+
+   * When $\Delta \approx 0$: $z_D \approx \delta$ → relatively high draw logit.
+   * As $|\Delta|$ grows: $-\gamma \Delta^2$ goes very negative and draws become unlikely.
+
+
+Convert logits to probabilities via softmax:
+
+$$
+Z = e^{z_H} + e^{z_D} + e^{z_A}
+$$
+$$
+p_H = \frac{e^{z_H}}{Z},\quad
+p_D = \frac{e^{z_D}}{Z},\quad
+p_A = \frac{e^{z_A}}{Z}
+$$
+
+These $p_H, p_D, p_A$ are the model’s probabilities given current strengths.
+
+In practice though, we compute the log-probabilities because of numerical stability. To avoid overflow, we use the `log_softmax` function from jax:
+
+```{python}
+import jax.numpy as jnp
+from jax.nn import log_softmax
+
+def forward(params, h, a):
+    delta = params["strength"][h] - params["strength"][a]
+    logit_home = params["phi"] + delta
+    logit_away = -params["phi"] - delta
+    logit_draw = params["draw_tendency"] - params["gamma"] * delta**2
+    logits = jnp.array([logit_home, logit_away, logit_draw])
+    return log_softmax(logits)
+```
+
+#### Loss
+
+Denote $y_H$, $y_A$, $y_D$ the one-hot encoded result variable; this means one and only one of them is 1 at a time, and 0 otherwise.
+
+For a single match, the **log-likelihood** is:
+
+$$
+\ell(\theta) = y_H \log p_H + y_D \log p_D + y_A \log p_A
+$$
+
+where $\theta$ denotes all parameters $(s_i), \phi, \delta, \gamma$.
+
+Equivalently, the **loss** we minimize is the __negative log-likelihood__ (NLL):
+
+$$
+L(\theta) = -\ell(\theta) \\
+= -\big( y_H \log p_H + y_D \log p_D + y_A \log p_A \big)
+$$
+
+This is a 3-class cross-entropy between the observed outcome and the model probabilities.
+
+```{python}
+def loss(params, h, a, res, lam=1e-3):
+    log_probs = forward(params, h, a)
+    return -(res * log_probs).sum()
+```
+
+### Incremental gradient descent
+
+We use one-step gradient descent after each game. 
+
+The update rule is the following:
+
+$$
+\theta_{t+1} = \theta_t - \eta \nabla L_t(\theta_t)
+$$
+
+where $\eta$ is the learning rate (`lr` in the code).
+For this, we conveniently use JAX's `tree_map`, that applies a function to the _leaves_ of a python data structure seen as a tree. 
+
+In our case, `params` is a dict that maps param names to their values. `grads` has exactly the same structure but with the gradients.
+
+```{python}
+from jax.tree_util import tree_map
+
+def update_tree(params, grads, lr):
+    return tree_map(lambda p, g: p - lr * g, params, grads)
+```
+
+### Placing bets
+
+Since we are interested in betting, at every game, we spot the best mispriced odds, according to our model. This means checking where the ratio between the predicted probabilities $\hat{p}$ and the inverse odds $\pi$ is maximized:
+
+$$t := \underset{\{ H, A, D \}}{\mathrm{argmax}} {\hat{p} \over \pi}$$.
+
+where $t \in \{H, A, D\}$.
+
+Indeed, the market-implied probability is $\pi$ (since $\pi = {1 \over \mathrm{odds}}$). If our model probability $\hat{p}$ is greater than $\pi$, the bet has positive expected value.
+
+We skip an initial burn-in (`first_game=80`) and only bet when the edge is at least 10% (`edge_threshold=1.1`, i.e. `value_diff[target] > 1.1`). Staking:
+
+- __Model value-bet__: stake 10% of its bankroll per bet.
+- __Kelly__: fraction of the bankroll $f^* = \frac{p o - 1}{o - 1}$ where $p$ is our predicted probability and $o$ the decimal odds. Negative fractions are clipped to 0 and, by definition, $f^* \le 1$. Kelly scales stake with the size of the edge and falls back to 0 when there is none. We start the Kelly bankroll at 100$ and use **fractional Kelly** with brakes: cap the dollar stake per bet (`max_stake`) at 40.
+
+For the two naive baselines:
+
+- always take the highest odds
+- always bet the draw
+   
+we also track a bankroll and stake 10% of that bankroll each time they bet.
+
+
+We factor the betting logic into small helpers. First, imports:
+
+```{python}
+from jax import grad, value_and_grad
+from functools import partial
+```
+
+Pick the outcome with the largest model-vs-market edge (returns target index, edge ratio, and odds):
+
+```{python}
+def select_value_bet(prediction, inv_odds):
+    value_diff = prediction / inv_odds
+    target = jnp.argmax(value_diff)
+    edge = value_diff[target]
+    target_odds = 1.0 / inv_odds[target]
+    return target, edge, target_odds
+```
+
+Decide whether we’re allowed to bet (after burn-in and above edge threshold):
+
+```{python}
+def should_place_bet(ix, edge, bankroll, first_game, edge_threshold):
+    return ix >= first_game and edge > edge_threshold
+```
+
+Compute the Kelly fraction for the chosen outcome, clipped by `fraction_cap`:
+
+```{python}
+def kelly_fraction_for_target(prediction, odds, target, fraction_cap):
+    raw_fraction = (prediction[target] * odds - 1) / (odds - 1)
+    return jnp.clip(raw_fraction, 0.0, fraction_cap)
+```
+
+Return calculation for a specific outcome (given inverse odds and one-hot result):
+
+```{python}
+def outcome_return(res, inv_odds, outcome_idx):
+    return res[outcome_idx] / inv_odds[outcome_idx] - 1
+```
+
+Generic fractional staking (and a thin wrapper that plugs in outcome index and odds):
+
+```{python}
+def bet_fraction_of_bankroll(bankroll, fraction, outcome_ret, active):
+    stake = fraction * bankroll if active else 0.0
+    profit = stake * outcome_ret
+    return profit, stake, bankroll + profit
+
+
+def settle_fractional_bet(bankroll, fraction, outcome_idx, res, inv_odds, active):
+    outcome_ret = outcome_return(res, inv_odds, outcome_idx)
+    return bet_fraction_of_bankroll(bankroll, fraction, outcome_ret, active)
+```
+
+Kelly staking with an optional absolute cap on the dollar stake:
+
+```{python}
+def apply_kelly_bet(bankroll, fraction, max_stake, outcome_ret):
+    stake = bankroll * fraction
+    stake = min(stake, max_stake, bankroll)  # hard cap + cannot exceed bankroll
+    profit = stake * outcome_ret
+    return profit, stake, bankroll + profit
+```
+
+Settle all strategies in one place (model flat, highest-odds, draw-only, and Kelly):
+
+```{python}
+def settle_all_bets(
+    res,
+    inv_odds,
+    target,
+    should_bet,
+    bankrolls,
+    kelly_fraction,
+    max_stake,
+    stake_fraction=0.1,
+):
+    outcome_ret = outcome_return(res, inv_odds, target)
+
+    gains = dict(kelly_fraction=kelly_fraction)
+    gains["net_gain"], gains["flat_stake"], bankrolls["flat"] = settle_fractional_bet(
+        bankrolls["flat"], stake_fraction, target, res, inv_odds, should_bet
+    )
+
+    highest_idx = inv_odds.argmin()
+    gains["net_gain_highest_odds"], gains["highest_stake"], bankrolls["highest"] = settle_fractional_bet(
+        bankrolls["highest"], stake_fraction, highest_idx, res, inv_odds, should_bet
+    )
+
+    gains["net_gain_draw"], gains["draw_stake"], bankrolls["draw"] = settle_fractional_bet(
+        bankrolls["draw"], stake_fraction, 2, res, inv_odds, should_bet
+    )
+
+    gains["kelly_profit"], gains["kelly_stake"], bankrolls["kelly"] = apply_kelly_bet(
+        bankrolls["kelly"], kelly_fraction, max_stake, outcome_ret
+    )
+
+    return gains, bankrolls
+```
+
+The main per-game step wires everything together: pick the target, gate bets, settle each strategy, and update parameters.
+
+```{python}
+def do_step(
+    row,
+    max_inv_odds,
+    dummy_result,
+    params,
+    ix,
+    bankroll,
+    bankroll_flat,
+    bankroll_highest,
+    bankroll_draw,
+    *,
+    first_game,
+    lr,
+    fraction_cap,  # fractional Kelly cap to reduce risk
+    edge_threshold,
+    max_stake,  # absolute stake cap to avoid total ruin on noisy edges
+):
+    h = row["HomeTeam"]
+    a = row["AwayTeam"]
+
+    prediction = jnp.exp(forward(params, h=h, a=a))
+    best_inv_odds = max_inv_odds.loc[ix].to_numpy()
+    target, edge, target_odds = select_value_bet(prediction, best_inv_odds)
+
+    kelly_fraction = kelly_fraction_for_target(prediction, target_odds, target, fraction_cap)
+    should_bet = should_place_bet(ix, edge, bankroll, first_game, edge_threshold)
+    kelly_fraction = float(kelly_fraction) if should_bet else 0.0  # ensure plain numeric for pandas
+
+    res = dummy_result.loc[ix].to_numpy()  # one-hot [H, A, D]
+
+    bankrolls = dict(
+        kelly=bankroll,
+        flat=bankroll_flat,
+        highest=bankroll_highest,
+        draw=bankroll_draw,
+    )
+    gains, bankrolls = settle_all_bets(
+        res=res,
+        inv_odds=best_inv_odds,
+        target=target,
+        should_bet=should_bet,
+        bankrolls=bankrolls,
+        kelly_fraction=kelly_fraction,
+        max_stake=max_stake,
+    )
+
+    all_gains = dict(
+        net_gain=gains["net_gain"],
+        net_gain_highest_odds=gains["net_gain_highest_odds"],
+        net_gain_draw=gains["net_gain_draw"],
+        kelly_profit=gains["kelly_profit"],
+        kelly_bankroll=bankrolls["kelly"],
+        kelly_fraction=gains["kelly_fraction"],
+        kelly_stake=gains["kelly_stake"],
+        highest_bankroll=bankrolls["highest"],
+        draw_bankroll=bankrolls["draw"],
+        highest_stake=gains["highest_stake"],
+        draw_stake=gains["draw_stake"],
+        flat_bankroll=bankrolls["flat"],
+        flat_stake=gains["flat_stake"],
+    )
+
+    loss_value, grads = value_and_grad(partial(loss, h=h, a=a, res=res))(params)
+    params = update_tree(params, grads, lr=lr)
+    return (
+        params,
+        all_gains,
+        loss_value,
+        bankrolls["kelly"],
+        bankrolls["flat"],
+        bankrolls["highest"],
+        bankrolls["draw"],
+    )
+```
+
+### Running the simulation
+
+Finally, we can write the loop to iterate through all games:
+
+```{python}
+def learn_and_gamble(
+    df,
+    max_inv_odds,
+    dummy_result,
+    init_params,
+    *,
+    init_bankroll,
+    first_game=80,
+    lr=0.1,
+    fraction_cap=0.9,
+    edge_threshold=1.1,
+    max_stake=40,
+):
+    path = []
+    losses = []
+    net_gains = []
+    params = init_params
+    bankroll = init_bankroll
+    bankroll_flat = init_bankroll
+    bankroll_highest = init_bankroll
+    bankroll_draw = init_bankroll
+    for ix, row in df.iterrows():
+        params, net_gain, loss_value, bankroll, bankroll_flat, bankroll_highest, bankroll_draw = do_step(
+            row,
+            max_inv_odds,
+            dummy_result,
+            params,
+            ix,
+            bankroll,
+            bankroll_flat,
+            bankroll_highest,
+            bankroll_draw,
+            first_game=first_game,
+            lr=lr,
+            fraction_cap=fraction_cap,
+            edge_threshold=edge_threshold,
+            max_stake=max_stake,
+        )
+        net_gains.append(net_gain)
+        path.append(params)
+        losses.append(loss_value)
+
+    losses = pd.Series(jnp.stack(losses))
+    strengths = pd.DataFrame([p["strength"] for p in path]).astype(float)
+    net_gains_df = pd.DataFrame.from_records(net_gains)
+
+    cumsum_cols = ["net_gain", "net_gain_highest_odds", "net_gain_draw", "kelly_profit"]
+    passthrough_cols = [
+        "kelly_bankroll",
+        "kelly_fraction",
+        "kelly_stake",
+        "highest_bankroll",
+        "draw_bankroll",
+        "highest_stake",
+        "draw_stake",
+        "flat_bankroll",
+        "flat_stake",
+    ]
+    cumulative = net_gains_df[cumsum_cols].cumsum().assign(
+        **{col: net_gains_df[col] for col in passthrough_cols}
+    )
+    return losses, strengths, cumulative
+```
+
+Now let's run the backtest and take a look at bankroll trajectories. Each one starts at 100$:
+
+```{python}
+teams = sorted(list(set(df["HomeTeam"]).union(df["AwayTeam"])))
+init_params = dict(
+    phi=jnp.array(1.0),
+    draw_tendency=jnp.array(0.0),
+    gamma=jnp.array(1.0),
+    strength={team: jnp.array(0.0) for team in teams},
+)
+init_bankroll = 100.0
+losses, strengths, net_gains = learn_and_gamble(df, max_inv_odds, dummy_result, init_params, init_bankroll=init_bankroll)
+net_gains[["flat_bankroll", "highest_bankroll", "draw_bankroll", "kelly_bankroll"]].plot(
+    title="bankrolls:\nstart = $100\n10% stakes for naive/model; capped Kelly", xlabel="game index"
+)
+plt.axhline(init_bankroll, label='initial bankroll', color='green')
+plt.legend()
+```
+
+The bankroll plot now shows paths starting at $100 for each strategy (10% stakes for the naive/model flat strategies and capped Kelly alongside).
+
+As we can see, the Kelly strategy gives us a profit of around $1000 (10x return), while naive strategies lose money overall. It means our model is picking up some signal, and staking appropriately helps us to make a profit.
+
+Note that __simulated positive return does not imply real-world profit__.
+
+### Inspecting team strengths
+
+We can take a look at the team strengths. Here we take Liverpool, which ranked first, and Southampton, which ranked last, at the end of the season:
+
+```{python}
+strengths[['Liverpool', "Southampton"]].plot(title='team strength', xlabel='game index')
+```
+
+This looks consistent !
+
+## Conclusion
+
+In this project, we explored how mathematics and statistical modeling interact with real football betting markets. We began by formalizing what a bet represents: a risky investment with a clearly defined payoff structure. From there, we examined arbitrage, the rare situations where odds misalign so much across bookmakers that a bettor can lock in a guaranteed profit. As expected, these opportunities were scarce, small, and often impractical in real markets due to limits and execution risk.
+
+Next, we shifted to the more relevant strategy in modern betting: **value betting**. By building a Bradley–Terry–style model with online learning in JAX, we continuously estimated team strengths and outcome probabilities throughout the 2024–2025 Premier League season. This allowed us to identify where bookmakers overpriced certain outcomes.
+
+We compared staking strategies and saw a stark difference:
+
+* **Naive baselines** (always bet the highest odds, or always the draw) **lose money**.
+* A **fixed-fraction “value” strategy** performs better but remains sensitive to volatility.
+* A **fractional Kelly strategy with risk controls** scales stakes to match the perceived edge, producing strong positive returns in the simulation, multiplying the bankroll by roughly 10.
+
+This highlights a key lesson:
+
+> Profitability in betting requires both *predictive edge* and *stake sizing optimized to that edge*.
+
+Finally, inspection of learned strengths confirmed intuitive football knowledge: top-performing teams’ estimated strengths rose over the season, while weaker sides declined.
+
+### A Realistic Takeaway
+
+A simulated profitable model does **not** guarantee real-world success. Real markets introduce frictions: bookmaker limits, sample noise, overrounds, delay in line updates, and even model misspecification. And Kelly staking can be aggressively volatile in the presence of uncertainty.
+
+Still, this project demonstrates:
+
+* A model can exploit mispriced odds.
+* Online learning adapts dynamically as the season evolves.
+* Combining statistical modeling with disciplined bankroll management can tilt expected value in the bettor’s favor.
+
+In short, beating the bookmaker is possible **in theory**, but requires statistical rigor, constant updating, and careful risk control.

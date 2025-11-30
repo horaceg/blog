@@ -40,8 +40,15 @@ website:
   
 format:
   html:
-    theme: litera
+    theme: cosmo
     css: styles.css
     anchor-sections: true
     highlight-style: github
+    fig-format: svg
+    dpi: 120
 
+jupyter: 
+  kernelspec:
+    name: "blog"
+    language: "python"
+    display_name: "Python 3.12 (blog)"
