@@ -11,6 +11,7 @@ dependencies = [
     "matplotlib>=3.10.7",
     "nbclient>=0.10.2",
     "nbformat>=5.10.4",
+    "networkx>=3.6",
     "numpy>=2.3.5",
     "pandas>=2.3.3",
     "pyarrow>=22.0.0",

@@ -29,8 +29,7 @@ Finally, we build a predictive model using JAX and online learning. We find misp
 Here is a glimpse of the dataset:
 
 ```{python}
-# %config InlineBackend.figure_format = 'retina'
-
+%config InlineBackend.figure_format = 'svg'
 
 import pandas as pd
 import numpy as np
@@ -45,6 +44,7 @@ assert df['Date'].is_monotonic_increasing
 
 df
 ```
+
 
 ## Betting on an outcome
 
@@ -173,6 +173,64 @@ We one-hot encode the full-time result `FTR`, using `pd.get_dummies`:
 dummy_result = pd.get_dummies(df["FTR"])[["H", "A", "D"]].astype(int)
 dummy_result
 ```
+
+### A model-free Kelly bettor from market averages
+
+Before training a model, we can treat the market itself as a predictor: take the average odds across bookmakers, invert them, and renormalize so they sum to 1. These normalized implied probabilities are then compared to the best (max) odds available in the market; whenever there is positive edge, we size the bet with (fractional) Kelly.
+
+```{python}
+# Implied probabilities from average odds (remove overround by normalizing to 1)
+avg_inv_odds = (
+    df[["AvgH", "AvgA", "AvgD"]]
+    .rename({"AvgH": "H", "AvgA": "A", "AvgD": "D"}, axis=1)
+    .pow(-1)
+)
+avg_probs = avg_inv_odds.div(avg_inv_odds.sum(axis=1), axis=0)
+
+init_bankroll = 100.0
+fraction_cap = 0.35  # brake to avoid very large Kelly swings on thin edges
+kelly_trace = []
+bankroll = init_bankroll
+outcomes = ["H", "A", "D"]
+
+for ix, probs in avg_probs.iterrows():
+    market_inv = max_inv_odds.loc[ix].to_numpy()
+    value_diff = probs.to_numpy() / market_inv  # edge vs best available odds
+    target = int(np.argmax(value_diff))
+    target_odds = 1.0 / market_inv[target]
+
+    fraction = (probs.iloc[target] * target_odds - 1) / (target_odds - 1)
+    fraction = np.clip(fraction, 0.0, fraction_cap)
+
+    res = dummy_result.loc[ix].to_numpy()
+    outcome_ret = res[target] / market_inv[target] - 1
+    stake = bankroll * fraction
+    profit = stake * outcome_ret
+    bankroll += profit
+
+    kelly_trace.append(
+        dict(
+            bankroll=bankroll,
+            stake=stake,
+            fraction=fraction,
+            target=outcomes[target],
+            edge=value_diff[target],
+        )
+    )
+
+kelly_df = pd.DataFrame(kelly_trace, index=df.index)
+n_bets = (kelly_df["stake"] > 0).sum()
+kelly_df[["bankroll"]].plot(
+    title=f"Model-free Kelly on normalized avg odds\nstart=${init_bankroll}, bets={n_bets}",
+    ylabel="bankroll",
+    xlabel="game index",
+)
+plt.axhline(init_bankroll, color="gray", linestyle="--", label="start bankroll")
+plt.legend()
+```
+
+This plot shows how far a simple, model-free Kelly bettor can go by only using crowd-implied probabilities (normalized average odds) and shopping for the best available price in the market.
+
 ### Bradley-terry inspired model
 
 #### Parameters
