@@ -35,9 +35,9 @@ website:
         text: blog.horaceg.xyz
 
   comments:
-    giscus: 
+    giscus:
       repo: horaceg/blog
-  
+
 format:
   html:
     theme: cosmo
@@ -47,7 +47,7 @@ format:
     fig-format: svg
     dpi: 120
 
-jupyter: 
+jupyter:
   kernelspec:
     name: "blog"
     language: "python"
