@@ -1,0 +1,19 @@
+[project]
+name = "blog"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "ipykernel>=7.1.0",
+    "jax>=0.8.1",
+    "jinja2>=3.1.6",
+    "matplotlib>=3.10.7",
+    "nbclient>=0.10.2",
+    "nbformat>=5.10.4",
+    "numpy>=2.3.5",
+    "pandas>=2.3.3",
+    "pyarrow>=22.0.0",
+    "pyyaml>=6.0.3",
+    "scikit-learn>=1.7.2",
+]

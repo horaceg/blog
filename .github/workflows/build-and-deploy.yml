@@ -21,7 +21,9 @@ jobs:
 
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
-      
+
+      # - name: set up uv
+
       - name: Render website
         uses: quarto-dev/quarto-actions/render@v2
 
