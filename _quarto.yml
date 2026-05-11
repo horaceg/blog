@@ -47,6 +47,7 @@ format:
     fig-format: svg
     dpi: 120
 
+
 jupyter:
   kernelspec:
     name: "blog"

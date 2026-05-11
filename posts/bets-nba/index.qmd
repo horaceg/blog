@@ -1,0 +1,193 @@
+---
+title: "NBA bets"
+date: 2025-12-01
+toc: true
+categories: ["probability", "inference", "statistics", 'modelling', 'betting', 'bookmaking', 'machine learning']
+code-fold: false
+code-tools: true
+---
+
+```{python}
+%config InlineBackend.figure_format = 'svg'
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from pathlib import Path
+
+plt.style.use("ggplot")
+
+datapath = Path("./data/games")
+games = pd.read_csv(datapath / "Games.csv", parse_dates=["gameDateTimeEst"]).query(
+    "gameDateTimeEst > '2007-08-01' and gameDateTimeEst < '2022-08-01'"
+)
+
+games = (
+    games.assign(
+        date=lambda f: f["gameDateTimeEst"].pipe(pd.to_datetime, errors="coerce")
+    )
+    .query("date.notna()")
+    .assign(date=lambda f: f["date"].dt.date)
+)
+
+schedule = pd.read_csv(datapath / "LeagueSchedule24_25.csv")
+
+team_histories = pd.read_csv(datapath / "TeamHistories.csv")
+team_stats = pd.read_csv(datapath / "TeamStatistics.csv")
+odds = (
+    pd.read_csv(Path("./data/odds/oddsData.csv"), parse_dates=["date"])
+    .assign(date=lambda f: f["date"].dt.date)
+    .query("season not in (2020, 2012, 2021)")
+)
+
+team_stats.iloc[0]
+```
+
+```{python}
+games.date.apply(type).value_counts()
+```
+```{python}
+team_histories
+```
+
+```{python}
+games
+```
+
+```{python}
+odds
+```
+
+```{python}
+odds.iloc[0]
+```
+
+```{python}
+odds['home/visitor'].value_counts()
+```
+
+```{python}
+odds_teams = odds['team'].value_counts().index.union(odds['opponent'].value_counts().index)
+odds_teams
+```
+
+```{python}
+games = games.assign(
+    home_team_nick=lambda f: f["hometeamCity"]
+    .str.cat(f["hometeamName"], sep=" ")
+    .where(f["hometeamCity"].eq("Los Angeles"), f["hometeamCity"]),
+    away_team_nick=lambda f: f["awayteamCity"]
+    .str.cat(f["awayteamName"], sep=" ")
+    .where(f["awayteamCity"].eq("Los Angeles"), f["awayteamCity"]),
+)
+
+home_index = games["home_team_nick"].value_counts().index
+
+away_index = games["away_team_nick"].value_counts().index
+
+games_teams = home_index.union(away_index).sort_values()
+games_teams
+```
+
+
+```{python}
+teams_map = {
+    "Atlanta": "Atlanta",
+    "Boston": "Boston",
+    "Brooklyn": "Brooklyn",
+    "Charlotte": "Charlotte",
+    "Chicago": "Chicago",
+    "Cleveland": "Cleveland",
+    "Dallas": "Dallas",
+    "Denver": "Denver",
+    "Detroit": "Detroit",
+    "Golden State": "Golden State",
+    "Houston": "Houston",
+    "Indiana": "Indiana",
+    "LA Clippers": "Los Angeles Clippers",
+    "LA Lakers": "Los Angeles Lakers",
+    "Memphis": "Memphis",
+    "Miami": "Miami",
+    "Milwaukee": "Milwaukee",
+    "Minnesota": "Minnesota",
+    "New Jersey": "New Jersey",
+    "New Orleans": "New Orleans",
+    "New York": "New York",
+    "Oklahoma City": "Oklahoma City",
+    "Orlando": "Orlando",
+    "Philadelphia": "Philadelphia",
+    "Phoenix": "Phoenix",
+    "Portland": "Portland",
+    "Sacramento": "Sacramento",
+    "San Antonio": "San Antonio",
+    "Seattle": "Seattle",
+    "Toronto": "Toronto",
+    "Utah": "Utah",
+    "Washington": "Washington",
+}
+
+odds = odds.assign(
+    team_nick=lambda f: f["team"].map(teams_map),
+    opponent_nick=lambda f: f["opponent"].map(teams_map),
+)
+```
+
+```{python}
+# Convert American moneyline to decimal odds (positive lines pay line/100: line/100, negative lines pay 100/|line|)
+def moneyline_to_decimal(series: pd.Series) -> pd.Series:
+    ml = pd.to_numeric(series, errors="coerce")
+    decimals = np.where(
+        ml > 0,
+        1 + ml / 100,
+        np.where(ml < 0, 1 + 100 / (-ml), np.nan),
+    )
+    return pd.Series(decimals, index=series.index)
+
+
+odds = odds.assign(
+    decimal_odds_team=moneyline_to_decimal(odds["moneyLine"]),
+    decimal_odds_opponent=moneyline_to_decimal(odds["opponentMoneyLine"]),
+    overround=lambda f: f['decimal_odds_team'].pow(-1) + f['decimal_odds_opponent'].pow(-1) - 1,
+)
+
+odds
+```
+
+
+```{python}
+odds.date.apply(type).value_counts()
+```
+
+```{python}
+merged = pd.merge(
+    games,
+    odds,
+    left_on=['date', 'home_team_nick'],
+    right_on=['date', 'team_nick'],
+    how='inner'
+).assign(team_choice='home_team')
+
+
+merged.iloc[0]
+
+merged = merged.assign(year=lambda f: f['date'].pipe(pd.to_datetime).dt.year)
+
+merged.season.value_counts()
+```
+```{python}
+merged.iloc[:2]
+```
+
+```{python}
+merged.iloc[0]
+```
+
+```{python}
+merged.groupby("team_choice").agg(
+    {"decimal_odds_team": "mean", "decimal_odds_opponent": "mean"}
+)
+```
+
+```{python}
+merged.overround.loc[lambda s: s.lt(0.1) & s.gt(0)].plot.hist(bins=40)
+```
